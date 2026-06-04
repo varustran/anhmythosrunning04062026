@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mythos Running Club - Face Search Gallery</title>
+    <title>Mythos Running Club - Ảnh 04/06/2026</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://unpkg.com/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
     <style>
         :root {
@@ -17,9 +18,6 @@
             --panel-bg: rgba(15, 22, 36, 0.7);
             --border-glass: rgba(255, 255, 255, 0.08);
             --accent-blue: linear-gradient(90deg, #1e40af, #3b82f6);
-            --accent-glow: rgba(59, 130, 246, 0.5);
-            --match-success: #10b981;
-            --match-glow: rgba(16, 185, 129, 0.6);
             --text-primary: #f3f4f6;
             --text-secondary: #9ca3af;
         }
@@ -59,9 +57,12 @@
             gap: 1rem;
         }
 
+        /* HIỂN THỊ LOGO TRÊN HEADER */
         .header-brand img {
             height: 45px;
+            width: 45px;
             object-fit: contain;
+            border-radius: 6px;
         }
 
         .header-brand h1 {
@@ -89,7 +90,7 @@
             margin: 2rem auto;
             padding: 0 2rem;
             display: grid;
-            grid-template-columns: 380px 1fr;
+            grid-template-columns: 320px 1fr;
             gap: 2rem;
         }
 
@@ -99,7 +100,7 @@
             }
         }
 
-        /* --- CONTROL PANEL --- */
+        /* --- INFO PANEL --- */
         .control-panel {
             background: var(--panel-bg);
             backdrop-filter: blur(16px);
@@ -123,162 +124,33 @@
             color: #fff;
         }
 
-        .status-container {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 0.85rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #ef4444;
-        }
-
-        .status-dot.ready {
-            background: var(--match-success);
-            box-shadow: 0 0 8px var(--match-success);
-        }
-
-        .upload-zone {
-            border: 2px dashed rgba(59, 130, 246, 0.3);
-            border-radius: 12px;
-            padding: 2rem 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.01);
-        }
-
-        .upload-zone:hover {
-            border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.04);
-            box-shadow: inset 0 0 15px rgba(59, 130, 246, 0.1);
-        }
-
-        .upload-zone i {
-            font-size: 2rem;
-            color: #3b82f6;
-            margin-bottom: 0.75rem;
-        }
-
-        .upload-zone p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        #file-input {
-            display: none;
-        }
-
-        .face-selector-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .faces-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            max-height: 150px;
-            overflow-y: auto;
-            padding: 2px;
-        }
-
-        .face-thumb {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            object-fit: cover;
-            transition: all 0.2s ease;
-            background: rgba(0,0,0,0.5);
-        }
-
-        .face-thumb:hover {
-            transform: scale(1.05);
-            border-color: #3b82f6;
-        }
-
-        .face-thumb.selected {
-            border-color: #3b82f6;
-            box-shadow: 0 0 10px var(--accent-glow);
-            transform: scale(1.05);
-        }
-
         .stats-display {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 0.75rem;
         }
 
         .stat-card {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 8px;
-            padding: 0.75rem;
+            padding: 1.25rem;
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.02);
         }
 
         .stat-val {
-            font-size: 1.25rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: #fff;
+            color: #3b82f6;
+            text-shadow: 0 0 15px rgba(59,130,246,0.3);
         }
 
         .stat-lbl {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
             margin-top: 0.25rem;
-        }
-
-        .search-progress-container {
-            display: none;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .progress-bar-bg {
-            background: rgba(255,255,255,0.1);
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-blue);
-            box-shadow: 0 0 8px #3b82f6;
-            transition: width 0.1s linear;
-        }
-
-        .btn-reset {
-            background: transparent;
-            border: 1px solid var(--border-glass);
-            color: var(--text-secondary);
-            padding: 0.6rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn-reset:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         /* --- GALLERY WORKSPACE --- */
@@ -306,6 +178,7 @@
             transform: translateZ(0);
         }
 
+        /* Bố cục Grid so le cao cấp (Masonry-like) */
         .gallery-card:nth-child(5n+1) {
             grid-column: span 1;
             grid-row: span 2;
@@ -335,6 +208,7 @@
 
         .gallery-card:hover img {
             transform: scale(1.06);
+            filter: brightness(1.1);
         }
 
         .card-overlay {
@@ -359,45 +233,6 @@
             white-space: nowrap;
             overflow: hidden;
             width: 100%;
-        }
-
-        .gallery-card.searching {
-            opacity: 0.6;
-        }
-
-        .gallery-card.match-active {
-            border-color: var(--match-success);
-            box-shadow: 0 0 20px var(--match-glow);
-        }
-
-        .gallery-card.match-failed {
-            opacity: 0.25;
-            filter: grayscale(0.8);
-        }
-
-        .match-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--match-success);
-            color: #fff;
-            padding: 0.25rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
-            transform: translateY(-10px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2;
-        }
-
-        .gallery-card.match-active .match-badge {
-            transform: translateY(0);
-            opacity: 1;
         }
 
         .skeleton {
@@ -497,16 +332,6 @@
             .lightbox-content-wrapper { width: 98vw; }
         }
 
-        .analysis-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
         .empty-gallery-msg {
             grid-column: 1 / -1;
             padding: 4rem 2rem;
@@ -528,7 +353,7 @@
 
     <header>
         <div class="header-brand">
-            <img src="logo.png" alt="Club Logo" onerror="this.style.display='none';">
+            <img src="logo.png" alt="Mythos Running Club Logo" onerror="this.style.display='none';">
             <h1>Mythos Running Club Gallery</h1>
         </div>
         <div class="header-underline"></div>
@@ -537,61 +362,27 @@
     <main>
         <aside class="control-panel">
             <div class="panel-title">
-                <i class="fa-solid fa-brain"></i>
-                <span>Face Engine Control</span>
-            </div>
-
-            <div class="status-container">
-                <div class="status-dot" id="engine-status-dot"></div>
-                <span id="engine-status-text">Initializing AI Engine...</span>
-            </div>
-
-            <div class="upload-zone" id="drop-zone">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <p style="font-weight: 500; color:#fff; margin-bottom: 4px;">Upload Search Profile Target</p>
-                <p>Drag and drop or click to browse</p>
-                <input type="file" id="file-input" accept="image/*">
-            </div>
-
-            <div class="face-selector-wrapper" id="face-selector-wrapper" style="display: none;">
-                <p class="panel-title" style="font-size: 0.85rem; color: var(--text-secondary);">
-                    Multiple faces detected. Select targeted runner identity:
-                </p>
-                <div class="faces-grid" id="faces-thumbnail-grid"></div>
+                <i class="fa-solid fa-images"></i>
+                <span>Album Dashboard</span>
             </div>
 
             <div class="stats-display">
                 <div class="stat-card">
                     <div class="stat-val" id="stat-total">0</div>
-                    <div class="stat-lbl">Total Photos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-val" id="stat-matches">-</div>
-                    <div class="stat-lbl">Identified Matches</div>
+                    <div class="stat-lbl">Total Media Assets</div>
                 </div>
             </div>
-
-            <div class="search-progress-container" id="search-progress-container">
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
-                    <span style="color: var(--text-secondary);" id="progress-phase-label">Matching descriptors...</span>
-                    <span id="progress-pct">0%</span>
-                </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
-                </div>
-            </div>
-
-            <button class="btn-reset" id="btn-reset-search" style="display: none;">
-                <i class="fa-solid fa-arrows-rotate"></i>
-                Clear Search Filter
-            </button>
+            
+            <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; text-align: center;">
+                Nhấp vào bất kỳ mục nào trong lưới ảnh để kích hoạt khung xem ảnh chi tiết độ phân giải cao 
+            </p>
         </aside>
 
         <section class="gallery-container">
             <div class="grid-layout" id="gallery-grid">
                 <div class="empty-gallery-msg" id="initial-loading-view">
                     <i class="fa-solid fa-circle-notch fa-spin"></i>
-                    <p>Scanning local storage directory asset matrix...</p>
+                    <p>Đang quét dữ liệu, vui lòng chờ.</p>
                 </div>
             </div>
         </section>
@@ -611,33 +402,17 @@
 
     <script>
         const CONFIG = {
-            DISTANCE_THRESHOLD: 0.55,
             IMAGE_DIRECTORY: '/images',
-            MAX_SCAN_FALLBACK_INDEX: 160 // Tự động quyét từ 1.jpg tới 160.jpg (đủ cho 124 ảnh của bạn)
+            MAX_SCAN_FALLBACK_INDEX: 150 // Quét thoải mái từ 1.jpg tới 150.jpg (Đủ cho 124 ảnh của bạn)
         };
 
         let appState = {
-            isEngineReady: false,
             galleryManifest: [],
-            computedDescriptors: {},
-            selectedTargetDescriptor: null,
             activeLightboxIndex: -1
         };
 
         const dom = {
-            statusDot: document.getElementById('engine-status-dot'),
-            statusText: document.getElementById('engine-status-text'),
-            dropZone: document.getElementById('drop-zone'),
-            fileInput: document.getElementById('file-input'),
-            faceSelectorWrapper: document.getElementById('face-selector-wrapper'),
-            facesThumbGrid: document.getElementById('faces-thumbnail-grid'),
             statTotal: document.getElementById('stat-total'),
-            statMatches: document.getElementById('stat-matches'),
-            progressContainer: document.getElementById('search-progress-container'),
-            progressLabel: document.getElementById('progress-phase-label'),
-            progressPct: document.getElementById('progress-pct'),
-            progressBarFill: document.getElementById('progress-bar-fill'),
-            btnResetSearch: document.getElementById('btn-reset-search'),
             galleryGrid: document.getElementById('gallery-grid'),
             lightbox: document.getElementById('lightbox-modal'),
             lightboxImg: document.getElementById('lightbox-image'),
@@ -648,7 +423,7 @@
             lbImgContainer: document.getElementById('lb-img-container')
         };
 
-        // ĐỒNG BỘ ĐƯỜNG DẪN FILE TĨNH
+        // ĐỒNG BỘ ĐƯỜNG DẪN FILE TĨNH TỰ ĐỘNG
         async function discoverGalleryAssets() {
             const extensions = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'PNG'];
             const discoveryStack = [];
@@ -681,9 +456,9 @@
                 dom.galleryGrid.innerHTML = `
                     <div class="empty-gallery-msg">
                         <i class="fa-solid fa-images"></i>
-                        <p>No images found in <code>/images</code> directory.</p>
+                        <p>No images detected in <code>/images</code> folder.</p>
                         <p style="font-size:0.75rem; color: var(--text-secondary); margin-top:0.5rem;">
-                           Make sure your images are named 1.jpg to 124.jpg inside the /images folder.
+                           Make sure your images are named 1.jpg to 124.jpg inside the /images directory.
                         </p>
                     </div>`;
                 return;
@@ -697,9 +472,7 @@
                 card.dataset.src = imgUrl;
 
                 card.innerHTML = `
-                    <div class="match-badge"><i class="fa-solid fa-user-check"></i><span class="match-confidence">0%</span></div>
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="skeleton" data-src="${imgUrl}" alt="Running Photo">
-                    <canvas class="analysis-canvas"></canvas>
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="skeleton" data-src="${imgUrl}" alt="Club Photo">
                     <div class="card-overlay">
                         <div class="card-filename">${imgUrl.substring(imgUrl.lastIndexOf('/') + 1)}</div>
                     </div>
@@ -710,7 +483,6 @@
             });
 
             initializeLazyLoading();
-            triggerBackgroundNeuralScan();
         }
 
         function initializeLazyLoading() {
@@ -724,269 +496,10 @@
                         observer.unobserve(img);
                     }
                 });
-            }, { rootMargin: '200px 0px' });
+            }, { rootMargin: '300px 0px' });
 
             lazyImages.forEach(img => observer.observe(img));
         }
-
-        // GIẢI PHÁP SỬ DỤNG HÀM TẢI LIÊN KẾT NGUYÊN BẢN (LOW-LEVEL LOADER) TRÁNH LỖI ENGINE KHỞI ĐỘNG TRÊN BROWSER
-        async function loadNeuralModels() {
-            try {
-                // Điểm cuối CDN phân phối mở rộng, tránh lỗi giải nén shard cấu trúc
-                const MODEL_URL = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights';
-                
-                // Gọi hàm trực tiếp từ nhân Core để nạp thẳng vào RAM trình duyệt
-                await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
-                await faceapi.loadFaceLandmarkModel(MODEL_URL);
-                await faceapi.loadFaceRecognitionModel(MODEL_URL);
-
-                appState.isEngineReady = true;
-                dom.statusDot.classList.add('ready');
-                dom.statusText.textContent = "AI Face Engine Active & Live";
-            } catch (err) {
-                console.warn("CDN Gốc bị nghẽn, kích hoạt cổng dự phòng CDN Unpkg...");
-                try {
-                    const FALLBACK_URL = 'https://unpkg.com/face-api.js@0.22.2/weights';
-                    await faceapi.nets.ssdMobilenetv1.loadFromUri(FALLBACK_URL);
-                    await faceapi.nets.faceLandmark68Net.loadFromUri(FALLBACK_URL);
-                    await faceapi.nets.faceRecognitionNet.loadFromUri(FALLBACK_URL);
-                    
-                    appState.isEngineReady = true;
-                    dom.statusDot.classList.add('ready');
-                    dom.statusText.textContent = "AI Face Engine Active & Live (Fallback)";
-                } catch(fallbackErr) {
-                    console.error("Mạng nơ-ron không khởi tạo được:", fallbackErr);
-                    dom.statusText.textContent = "Error Initialization Neural Models";
-                    dom.statusText.style.color = "#ef4444";
-                }
-            }
-        }
-
-        // HÀM QUÉT NỀN ĐÃ ĐƯỢC TỐI ƯU - KHÔNG CÒN GÂY LAG MÁY
-        async function triggerBackgroundNeuralScan() {
-            if (!appState.isEngineReady) {
-                setTimeout(triggerBackgroundNeuralScan, 1000);
-                return;
-            }
-        
-            const cards = document.querySelectorAll('.gallery-card');
-            
-            // Vòng lặp quét tuần tự từng ảnh một, không ép CPU chạy đồng thời
-            for (let i = 0; i < cards.length; i++) {
-                const card = cards[i];
-                const imgUrl = card.dataset.src;
-                card.classList.add('searching');
-                
-                try {
-                    const htmlImg = new Image();
-                    htmlImg.src = imgUrl;
-                    await new Promise((resolve) => htmlImg.onload = resolve);
-        
-                    // TỐI ƯU 1: Tạo một Canvas thu nhỏ để AI quét (Giúp giảm tải 80% cho CPU/RAM)
-                    const maxDimension = 600; // Giới hạn chiều rộng/cao tối đa khi AI đọc
-                    let targetWidth = htmlImg.naturalWidth;
-                    let targetHeight = htmlImg.naturalHeight;
-                    
-                    if (targetWidth > maxDimension || targetHeight > maxDimension) {
-                        if (targetWidth > targetHeight) {
-                            targetHeight = Math.round((targetHeight * maxDimension) / targetWidth);
-                            targetWidth = maxDimension;
-                        } else {
-                            targetWidth = Math.round((targetWidth * maxDimension) / targetHeight);
-                            targetHeight = maxDimension;
-                        }
-                    }
-        
-                    const offscreenCanvas = document.createElement('canvas');
-                    offscreenCanvas.width = targetWidth;
-                    offscreenCanvas.height = targetHeight;
-                    const offscreenCtx = offscreenCanvas.getContext('2d');
-                    offscreenCtx.drawImage(htmlImg, 0, 0, targetWidth, targetHeight);
-        
-                    // AI quét trên canvas thu nhỏ, tốc độ nhanh hơn gấp 5 lần
-                    const analyticalDetections = await faceapi.detectAllFaces(offscreenCanvas)
-                        .withFaceLandmarks()
-                        .withFaceDescriptors();
-        
-                    // Khôi phục lại tỷ lệ chuẩn để vẽ khung lên ảnh gốc cho chính xác
-                    const scaleX = htmlImg.naturalWidth / targetWidth;
-                    const scaleY = htmlImg.naturalHeight / targetHeight;
-                    
-                    const remappedDetections = analyticalDetections.map(det => {
-                        const box = det.detection.box;
-                        return {
-                            ...det,
-                            detection: {
-                                ...det.detection,
-                                box: new faceapi.Box(box.x * scaleX, box.y * scaleY, box.width * scaleX, box.height * scaleY)
-                            }
-                        };
-                    });
-        
-                    appState.computedDescriptors[imgUrl] = remappedDetections;
-                    drawFaceBoxesOnCard(card, htmlImg, remappedDetections);
-                } catch (e) {
-                    console.error(`Error scanning index image [${imgUrl}]: `, e);
-                }
-                
-                card.classList.remove('searching');
-        
-                // TỐI ƯU 2: Tạo một khoảng nghỉ 150ms giữa các ảnh để giải phóng CPU cho trình duyệt xử lý tác vụ khác
-                await new Promise(resolve => setTimeout(resolve, 150));
-            }
-            
-            // Báo cáo khi hoàn thành quét toàn bộ dữ liệu
-            dom.statusText.textContent = "AI Face Engine Active & All Images Scanned!";
-        }
-
-        function drawFaceBoxesOnCard(card, htmlImg, detections) {
-            const canvas = card.querySelector('.analysis-canvas');
-            if (!canvas || detections.length === 0) return;
-
-            const displaySize = { width: card.clientWidth, height: card.clientHeight };
-            canvas.width = displaySize.width;
-            canvas.height = displaySize.height;
-
-            const ctx = canvas.getContext('2d');
-            ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
-            ctx.lineWidth = 2;
-
-            detections.forEach(det => {
-                const box = det.detection.box;
-                const x = (box.x / htmlImg.naturalWidth) * displaySize.width;
-                const y = (box.y / htmlImg.naturalHeight) * displaySize.height;
-                const w = (box.width / htmlImg.naturalWidth) * displaySize.width;
-                const h = (box.height / htmlImg.naturalHeight) * displaySize.height;
-                ctx.strokeRect(x, y, w, h);
-            });
-        }
-
-        dom.dropZone.addEventListener('click', () => dom.fileInput.click());
-        dom.dropZone.addEventListener('dragover', (e) => e.preventDefault());
-        dom.dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            if (e.dataTransfer.files.length > 0) processUploadedQueryFile(e.dataTransfer.files[0]);
-        });
-        dom.fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) processUploadedQueryFile(e.target.files[0]);
-        });
-
-        async function processUploadedQueryFile(file) {
-            if (!appState.isEngineReady) {
-                alert("Please wait until the AI models are initialized.");
-                return;
-            }
-
-            dom.faceSelectorWrapper.style.display = 'none';
-            dom.facesThumbGrid.innerHTML = '';
-            
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = async () => {
-                    dom.statusText.textContent = "Analyzing uploaded target image...";
-                    
-                    const detections = await faceapi.detectAllFaces(img)
-                        .withFaceLandmarks()
-                        .withFaceDescriptors();
-
-                    if (detections.length === 0) {
-                        dom.statusText.textContent = "No faces found in this picture.";
-                        return;
-                    }
-
-                    dom.statusText.textContent = `Extracted ${detections.length} face descriptors.`;
-                    dom.faceSelectorWrapper.style.display = 'flex';
-                    dom.btnResetSearch.style.display = 'flex';
-
-                    for (let i = 0; i < detections.length; i++) {
-                        const det = detections[i];
-                        const box = det.detection.box;
-                        
-                        const canvasThumb = document.createElement('canvas');
-                        canvasThumb.width = 80;
-                        canvasThumb.height = 80;
-                        const ctxThumb = canvasThumb.getContext('2d');
-
-                        ctxThumb.drawImage(img, box.x, box.y, box.width, box.height, 0, 0, 80, 80);
-
-                        const thumbImg = document.createElement('img');
-                        thumbImg.className = 'face-thumb';
-                        thumbImg.src = canvasThumb.toDataURL();
-                        
-                        thumbImg.addEventListener('click', () => {
-                            document.querySelectorAll('.face-thumb').forEach(el => el.classList.remove('selected'));
-                            thumbImg.classList.add('selected');
-                            appState.selectedTargetDescriptor = det.descriptor;
-                            executeFaceBiometricMatchingMatrix();
-                        });
-
-                        dom.facesThumbGrid.appendChild(thumbImg);
-                    }
-                    dom.facesThumbGrid.children[0].click();
-                };
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function executeFaceBiometricMatchingMatrix() {
-            if (!appState.selectedTargetDescriptor) return;
-
-            dom.progressContainer.style.display = 'flex';
-            let matchedElementsCounter = 0;
-
-            const cards = document.querySelectorAll('.gallery-card');
-            const totalItems = cards.length;
-
-            cards.forEach((card, index) => {
-                const url = card.dataset.src;
-                const matchesFoundInPhoto = appState.computedDescriptors[url] || [];
-                
-                let highMatchConfidence = 0;
-                let isMatchVerified = false;
-
-                for (let det of matchesFoundInPhoto) {
-                    const distance = faceapi.euclideanDistance(appState.selectedTargetDescriptor, det.descriptor);
-                    if (distance <= CONFIG.DISTANCE_THRESHOLD) {
-                        isMatchVerified = true;
-                        const currentConfidence = Math.round((1 - distance) * 100);
-                        if (currentConfidence > highMatchConfidence) highMatchConfidence = currentConfidence;
-                    }
-                }
-
-                const badge = card.querySelector('.match-badge');
-                const confidenceSpan = card.querySelector('.match-confidence');
-                card.classList.remove('match-active', 'match-failed');
-                
-                if (isMatchVerified) {
-                    card.classList.add('match-active');
-                    confidenceSpan.textContent = `${highMatchConfidence}%`;
-                    matchedElementsCounter++;
-                } else {
-                    card.classList.add('match-failed');
-                }
-
-                const currentPct = Math.round(((index + 1) / totalItems) * 100);
-                dom.progressPct.textContent = `${currentPct}%`;
-                dom.progressBarFill.style.width = `${currentPct}%`;
-            });
-
-            dom.statMatches.textContent = matchedElementsCounter;
-            setTimeout(() => { dom.progressContainer.style.display = 'none'; }, 800);
-        }
-
-        dom.btnResetSearch.addEventListener('click', () => {
-            appState.selectedTargetDescriptor = null;
-            dom.faceSelectorWrapper.style.display = 'none';
-            dom.btnResetSearch.style.display = 'none';
-            dom.statMatches.textContent = '-';
-            dom.statusText.textContent = "AI Face Engine Active & Live";
-            
-            document.querySelectorAll('.gallery-card').forEach(card => {
-                card.classList.remove('match-active', 'match-failed');
-            });
-        });
 
         /* --- LIGHTBOX MECHANICS --- */
         let currentZoomScale = 1;
@@ -1099,10 +612,7 @@
             }
         }, { passive: true });
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            await loadNeuralModels();
-            await discoverGalleryAssets();
-        });
+        window.addEventListener('DOMContentLoaded', discoverGalleryAssets);
     </script>
 </body>
 </html>
