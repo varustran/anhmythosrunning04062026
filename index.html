@@ -611,9 +611,9 @@
 
     <script>
         const CONFIG = {
-            DISTANCE_THRESHOLD: 0.5,
+            DISTANCE_THRESHOLD: 0.55,
             IMAGE_DIRECTORY: '/images',
-            MAX_SCAN_FALLBACK_INDEX: 150 // Tự động quyét từ 1.jpg tới 150.jpg (đủ cho 124 ảnh của bạn)
+            MAX_SCAN_FALLBACK_INDEX: 160 // Tự động quyét từ 1.jpg tới 160.jpg (đủ cho 124 ảnh của bạn)
         };
 
         let appState = {
@@ -650,7 +650,7 @@
 
         // ĐỒNG BỘ ĐƯỜNG DẪN FILE TĨNH
         async function discoverGalleryAssets() {
-            const extensions = ['jpg', 'jpeg', 'png', 'webp'];
+            const extensions = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'PNG'];
             const discoveryStack = [];
             
             for (let i = 1; i <= CONFIG.MAX_SCAN_FALLBACK_INDEX; i++) {
@@ -729,23 +729,36 @@
             lazyImages.forEach(img => observer.observe(img));
         }
 
-        // GIẢI PHÁP CDN UNPKG SIÊU TỐC - KHÔNG LO LỖI MIME HOẶC CHẶN FILE TRÊN VERCEL
+        // GIẢI PHÁP SỬ DỤNG HÀM TẢI LIÊN KẾT NGUYÊN BẢN (LOW-LEVEL LOADER) TRÁNH LỖI ENGINE KHỞI ĐỘNG TRÊN BROWSER
         async function loadNeuralModels() {
             try {
-                // Gọi trực tiếp kho tổng đã được cấu hình tối ưu cấu trúc file shard
-                const MODEL_URL = 'https://unpkg.com/face-api.js@0.22.2/weights';
+                // Điểm cuối CDN phân phối mở rộng, tránh lỗi giải nén shard cấu trúc
+                const MODEL_URL = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights';
                 
-                await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
-                await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-                await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-        
+                // Gọi hàm trực tiếp từ nhân Core để nạp thẳng vào RAM trình duyệt
+                await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
+                await faceapi.loadFaceLandmarkModel(MODEL_URL);
+                await faceapi.loadFaceRecognitionModel(MODEL_URL);
+
                 appState.isEngineReady = true;
                 dom.statusDot.classList.add('ready');
                 dom.statusText.textContent = "AI Face Engine Active & Live";
             } catch (err) {
-                console.error("Critical Model Initialization Pipeline Error: ", err);
-                dom.statusText.textContent = "Error Initialization Neural Models";
-                dom.statusText.style.color = "#ef4444";
+                console.warn("CDN Gốc bị nghẽn, kích hoạt cổng dự phòng CDN Unpkg...");
+                try {
+                    const FALLBACK_URL = 'https://unpkg.com/face-api.js@0.22.2/weights';
+                    await faceapi.nets.ssdMobilenetv1.loadFromUri(FALLBACK_URL);
+                    await faceapi.nets.faceLandmark68Net.loadFromUri(FALLBACK_URL);
+                    await faceapi.nets.faceRecognitionNet.loadFromUri(FALLBACK_URL);
+                    
+                    appState.isEngineReady = true;
+                    dom.statusDot.classList.add('ready');
+                    dom.statusText.textContent = "AI Face Engine Active & Live (Fallback)";
+                } catch(fallbackErr) {
+                    console.error("Mạng nơ-ron không khởi tạo được:", fallbackErr);
+                    dom.statusText.textContent = "Error Initialization Neural Models";
+                    dom.statusText.style.color = "#ef4444";
+                }
             }
         }
 
