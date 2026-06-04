@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mythos Running Club - Face Search Gallery</title>
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+    
+    <!-- SỬ DỤNG BẢN PHÂN PHỐI CHUẨN ĐỂ ĐỒNG BỘ ĐƯỜNG DẪN MODEL -->
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
 
     <style>
         :root {
@@ -98,7 +102,7 @@
             }
         }
 
-        /* --- CONTROL PANEL (SIDEBAR) --- */
+        /* --- CONTROL PANEL --- */
         .control-panel {
             background: var(--panel-bg);
             backdrop-filter: blur(16px);
@@ -122,7 +126,6 @@
             color: #fff;
         }
 
-        /* Model Loading Status */
         .status-container {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
@@ -146,7 +149,6 @@
             box-shadow: 0 0 8px var(--match-success);
         }
 
-        /* Upload Target Area */
         .upload-zone {
             border: 2px dashed rgba(59, 130, 246, 0.3);
             border-radius: 12px;
@@ -178,7 +180,6 @@
             display: none;
         }
 
-        /* Detected Faces Preview Selection */
         .face-selector-wrapper {
             display: flex;
             flex-direction: column;
@@ -216,7 +217,6 @@
             transform: scale(1.05);
         }
 
-        /* Global Match Statistics */
         .stats-display {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -242,7 +242,6 @@
             margin-top: 0.25rem;
         }
 
-        /* Process Progress Bar */
         .search-progress-container {
             display: none;
             flex-direction: column;
@@ -264,7 +263,6 @@
             transition: width 0.1s linear;
         }
 
-        /* Reset Button */
         .btn-reset {
             background: transparent;
             border: 1px solid var(--border-glass);
@@ -293,7 +291,6 @@
             gap: 1.5rem;
         }
 
-        /* Grid Configuration */
         .grid-layout {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -301,7 +298,6 @@
             gap: 1.5rem;
         }
 
-        /* Modern Card Element */
         .gallery-card {
             position: relative;
             background: var(--panel-bg);
@@ -313,7 +309,6 @@
             transform: translateZ(0);
         }
 
-        /* Grid Item Spans to create an asymmetric layout flow */
         .gallery-card:nth-child(5n+1) {
             grid-column: span 1;
             grid-row: span 2;
@@ -345,7 +340,6 @@
             transform: scale(1.06);
         }
 
-        /* Overlay Meta Info */
         .card-overlay {
             position: absolute;
             inset: 0;
@@ -370,7 +364,6 @@
             width: 100%;
         }
 
-        /* Match States indicators */
         .gallery-card.searching {
             opacity: 0.6;
         }
@@ -410,7 +403,6 @@
             opacity: 1;
         }
 
-        /* Card Card Skeleton Loader */
         .skeleton {
             background: linear-gradient(90deg, #0f1624 25%, #1e293b 50%, #0f1624 75%);
             background-size: 200% 100%;
@@ -474,7 +466,6 @@
             cursor: grabbing;
         }
 
-        /* Controls UI Overlay */
         .lightbox-ui-btn {
             position: absolute;
             background: rgba(255, 255, 255, 0.05);
@@ -509,7 +500,6 @@
             .lightbox-content-wrapper { width: 98vw; }
         }
 
-        /* Face Analysis Overlays inside Grid Card */
         .analysis-canvas {
             position: absolute;
             top: 0;
@@ -520,7 +510,6 @@
             z-index: 1;
         }
 
-        /* Empty Info Banner */
         .empty-gallery-msg {
             grid-column: 1 / -1;
             padding: 4rem 2rem;
@@ -549,9 +538,10 @@
     </header>
 
     <main>
+        <!-- CONTROLS PANEL -->
         <aside class="control-panel">
             <div class="panel-title">
-                <i class="fa-solid to fa-brain-circuit"></i>
+                <i class="fa-solid fa-brain"></i>
                 <span>Face Engine Control</span>
             </div>
 
@@ -571,8 +561,7 @@
                 <p class="panel-title" style="font-size: 0.85rem; color: var(--text-secondary);">
                     Multiple faces detected. Select targeted runner identity:
                 </p>
-                <div class="faces-grid" id="faces-thumbnail-grid">
-                    </div>
+                <div class="faces-grid" id="faces-thumbnail-grid"></div>
             </div>
 
             <div class="stats-display">
@@ -589,7 +578,7 @@
             <div class="search-progress-container" id="search-progress-container">
                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
                     <span style="color: var(--text-secondary);" id="progress-phase-label">Matching descriptors...</span>
-                    <span font-weight: 600; id="progress-pct">0%</span>
+                    <span id="progress-pct">0%</span>
                 </div>
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="progress-bar-fill"></div>
@@ -602,6 +591,7 @@
             </button>
         </aside>
 
+        <!-- GALLERY WORKspace -->
         <section class="gallery-container">
             <div class="grid-layout" id="gallery-grid">
                 <div class="empty-gallery-msg" id="initial-loading-view">
@@ -612,41 +602,34 @@
         </section>
     </main>
 
+    <!-- LIGHTBOX MODAL -->
     <div class="lightbox-modal" id="lightbox-modal">
         <div class="lightbox-content-wrapper">
             <button class="lightbox-ui-btn btn-close-lightbox" id="lb-close" title="Close (Esc)"><i class="fa-solid fa-xmark"></i></button>
             <button class="lightbox-ui-btn btn-download-lightbox" id="lb-download" title="Download Original"><i class="fa-solid fa-download"></i></button>
-            
             <button class="lightbox-ui-btn btn-prev-lightbox" id="lb-prev" title="Previous KeyLeft"><i class="fa-solid fa-chevron-left"></i></button>
-            
             <div class="lightbox-img-container" id="lb-img-container">
                 <img src="" alt="Enlarged View" class="lightbox-image" id="lightbox-image" draggable="false">
             </div>
-            
             <button class="lightbox-ui-btn btn-next-lightbox" id="lb-next" title="Next KeyRight"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
     </div>
 
     <script>
-        /**
-         * PRODUCTION CONFIG CONSTANTS
-         */
         const CONFIG = {
-            DISTANCE_THRESHOLD: 0.5, // strict biometric distance matching threshold
+            DISTANCE_THRESHOLD: 0.5,
             IMAGE_DIRECTORY: '/images',
-            MAX_SCAN_FALLBACK_INDEX: 100 // Dynamic discovery up to 100 images sequential scanning approach if fallback manifest isn't deployed
+            MAX_SCAN_FALLBACK_INDEX: 200 // Quét từ 1.jpg đến 50.jpg, đổi số này tăng lên nếu bạn có nhiều ảnh hơn
         };
 
-        // State Machine Storage
         let appState = {
             isEngineReady: false,
-            galleryManifest: [], // Holds absolute URLs or discoverable image file indices
-            computedDescriptors: {}, // Key: image source, Value: arrays of descriptors found
-            selectedTargetDescriptor: null, // User selected single vector array configuration
+            galleryManifest: [],
+            computedDescriptors: {},
+            selectedTargetDescriptor: null,
             activeLightboxIndex: -1
         };
 
-        // DOM Pointers
         const dom = {
             statusDot: document.getElementById('engine-status-dot'),
             statusText: document.getElementById('engine-status-text'),
@@ -671,34 +654,20 @@
             lbImgContainer: document.getElementById('lb-img-container')
         };
 
-        /**
-         * AUTOMATED DIRECTORY DISCOVERY OVER VERCEL (RUNTIME RUN)
-         * Since client-side static hosts can't perform 'fs.readdir', we run a non-blocking asynchronous multi-thread ping profile
-         * into /images folder sequence using common image formats or an optimized layout strategy.
-         */
+        // ĐỒNG BỘ THẲNG FILE TĨNH TRÊN VERCEL SERVER
         async function discoverGalleryAssets() {
-            const commonExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+            const extensions = ['jpg', 'jpeg', 'png', 'webp'];
             const discoveryStack = [];
             
-            // Generate matrix scan promises
-            // Scans systematically numbered images: 1, 2, 3... up to threshold
+            // Quét tìm các file ảnh đã đánh số thứ tự trong folder /images
             for (let i = 1; i <= CONFIG.MAX_SCAN_FALLBACK_INDEX; i++) {
-                for (let ext of commonExtensions) {
-                    const url = `${CONFIG.IMAGE_DIRECTORY}/${i}.${ext}`;
-                    discoveryStack.push(probeImageUrl(url));
-                }
+                extensions.forEach(ext => {
+                    discoveryStack.push(probeImageUrl(`${CONFIG.IMAGE_DIRECTORY}/${i}.${ext}`));
+                });
             }
-
-            // Also probe common default generic file patterns if sequentially labeled items are not found
-            const specificFilenames = ['photo1.jpg','photo2.jpg','photo3.jpg','photo4.jpg','photo5.jpg','run1.jpg','run2.jpg','run3.jpg','run4.jpg'];
-            specificFilenames.forEach(name => {
-                discoveryStack.push(probeImageUrl(`${CONFIG.IMAGE_DIRECTORY}/${name}`));
-            });
 
             const results = await Promise.all(discoveryStack);
             appState.galleryManifest = results.filter(url => url !== null);
-            
-            // Remove duplicates
             appState.galleryManifest = [...new Set(appState.galleryManifest)];
             
             dom.statTotal.textContent = appState.galleryManifest.length;
@@ -714,16 +683,15 @@
             });
         }
 
-        /**
-         * RENDER BASE CONTAINER CARDS
-         */
         function renderGalleryBaseGrid() {
             if (appState.galleryManifest.length === 0) {
                 dom.galleryGrid.innerHTML = `
                     <div class="empty-gallery-msg">
                         <i class="fa-solid fa-images"></i>
-                        <p>No valid assets detected within the runtime directory <code>/images</code> folder.</p>
-                        <p style="font-size:0.75rem; color: var(--text-secondary); margin-top:0.5rem;">Please check that your project deployment contains images named 1.jpg, 2.jpg etc. directly within the static subfolder matrix.</p>
+                        <p>No images found in <code>/images</code> directory.</p>
+                        <p style="font-size:0.75rem; color: var(--text-secondary); margin-top:0.5rem;">
+                           Make sure your images are named 1.jpg, 2.jpg, 3.png etc. inside the /images folder.
+                        </p>
                     </div>`;
                 return;
             }
@@ -737,7 +705,7 @@
 
                 card.innerHTML = `
                     <div class="match-badge"><i class="fa-solid fa-user-check"></i><span class="match-confidence">0%</span></div>
-                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="skeleton" data-src="${imgUrl}" alt="Gallery running event frame">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="skeleton" data-src="${imgUrl}" alt="Running Photo">
                     <canvas class="analysis-canvas"></canvas>
                     <div class="card-overlay">
                         <div class="card-filename">${imgUrl.substring(imgUrl.lastIndexOf('/') + 1)}</div>
@@ -749,13 +717,9 @@
             });
 
             initializeLazyLoading();
-            // Fire non-blocking asynchronous global processing system pipeline
             triggerBackgroundNeuralScan();
         }
 
-        /**
-         * INTERSECTION OBSERVER LAZY LOADER INFRASTRUCTURE
-         */
         function initializeLazyLoading() {
             const lazyImages = document.querySelectorAll('.gallery-card img[data-src]');
             const observer = new IntersectionObserver((entries, observer) => {
@@ -763,9 +727,7 @@
                     if (entry.isIntersecting) {
                         const img = entry.target;
                         img.src = img.dataset.src;
-                        img.onload = () => {
-                            img.classList.remove('skeleton');
-                        };
+                        img.onload = () => img.classList.remove('skeleton');
                         observer.unobserve(img);
                     }
                 });
@@ -774,50 +736,39 @@
             lazyImages.forEach(img => observer.observe(img));
         }
 
-        /**
-         * FACE-API AI RECOGNITION PIPELINE ENGINE ENGINE INTIALIZATION
-         */
+        // TẢI CHUẨN HOÁ AI MODEL QUA CDN KHÔNG BỊ CHẶN CORS TRÊN VERCEL
         async function loadNeuralModels() {
             try {
+                // Sử dụng CDN chuyên dụng của jsdelivr trỏ trực tiếp vào bộ models gốc
                 const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
                 
-                // Concurrent model load array setup
-                await Promise.all([
-                    faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
-                    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
-                ]);
+                await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
 
                 appState.isEngineReady = true;
                 dom.statusDot.classList.add('ready');
                 dom.statusText.textContent = "AI Face Engine Active & Live";
             } catch (err) {
-                console.error("Critical Model Initialization Pipeline Interruption Sequence Error: ", err);
+                console.error("Critical Model Initialization Pipeline Error: ", err);
                 dom.statusText.textContent = "Error Initialization Neural Models";
                 dom.statusText.style.color = "#ef4444";
             }
         }
 
-        /**
-         * BACKGROUND SCAN PIPELINE FOR STATIC ASSETS MATRIX
-         */
         async function triggerBackgroundNeuralScan() {
             if (!appState.isEngineReady) {
-                // Loop back execution queue hook safely if core is loading
                 setTimeout(triggerBackgroundNeuralScan, 1000);
                 return;
             }
 
             const cards = document.querySelectorAll('.gallery-card');
-            
             for (let i = 0; i < cards.length; i++) {
                 const card = cards[i];
                 const imgUrl = card.dataset.src;
-                
                 card.classList.add('searching');
                 
                 try {
-                    // Instantiation image parsing container dynamically detached from layout DOM processing viewport frames
                     const htmlImg = new Image();
                     htmlImg.src = imgUrl;
                     await new Promise((resolve) => htmlImg.onload = resolve);
@@ -827,13 +778,10 @@
                         .withFaceDescriptors();
 
                     appState.computedDescriptors[imgUrl] = analyticalDetections;
-
-                    // Optionally overlay box matrix bounding canvas metrics
                     drawFaceBoxesOnCard(card, htmlImg, analyticalDetections);
                 } catch (e) {
-                    console.error(`Neural parsing context fault across index file path array targeting path [${imgUrl}]: `, e);
+                    console.error(`Error scanning index image [${imgUrl}]: `, e);
                 }
-                
                 card.classList.remove('searching');
             }
         }
@@ -846,21 +794,12 @@
             canvas.width = displaySize.width;
             canvas.height = displaySize.height;
 
-            // Compute dimensions scaling configurations
-            const dims = faceapi.matchDimensions(canvas, displaySize);
-            const resizedDetections = faceapi.resizeResults(detections, {
-                width: htmlImg.naturalWidth,
-                height: htmlImg.naturalHeight
-            });
-
-            // Draw bounding context structures seamlessly inside cards
             const ctx = canvas.getContext('2d');
             ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
             ctx.lineWidth = 2;
 
-            resizedDetections.forEach(det => {
+            detections.forEach(det => {
                 const box = det.detection.box;
-                // Translate image dimensions scaling mappings to dynamic viewport client sizes
                 const x = (box.x / htmlImg.naturalWidth) * displaySize.width;
                 const y = (box.y / htmlImg.naturalHeight) * displaySize.height;
                 const w = (box.width / htmlImg.naturalWidth) * displaySize.width;
@@ -869,26 +808,19 @@
             });
         }
 
-        /**
-         * UPLOAD PROCESSING CORE ALGORITHMIC LOGIC PIPELINE
-         */
         dom.dropZone.addEventListener('click', () => dom.fileInput.click());
-        dom.dropZone.addEventListener('dragover', (e) => { e.preventDefault(); });
+        dom.dropZone.addEventListener('dragover', (e) => e.preventDefault());
         dom.dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            if (e.dataTransfer.files.length > 0) {
-                processUploadedQueryFile(e.dataTransfer.files[0]);
-            }
+            if (e.dataTransfer.files.length > 0) processUploadedQueryFile(e.dataTransfer.files[0]);
         });
         dom.fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                processUploadedQueryFile(e.target.files[0]);
-            }
+            if (e.target.files.length > 0) processUploadedQueryFile(e.target.files[0]);
         });
 
         async function processUploadedQueryFile(file) {
             if (!appState.isEngineReady) {
-                alert("Please wait until the biometric models are initialized fully into RAM arrays.");
+                alert("Please wait until the AI models are initialized.");
                 return;
             }
 
@@ -900,22 +832,21 @@
                 const img = new Image();
                 img.src = event.target.result;
                 img.onload = async () => {
-                    dom.statusText.textContent = "Analyzing uploaded query file...";
+                    dom.statusText.textContent = "Analyzing uploaded target image...";
                     
                     const detections = await faceapi.detectAllFaces(img)
                         .withFaceLandmarks()
                         .withFaceDescriptors();
 
                     if (detections.length === 0) {
-                        dom.statusText.textContent = "No faces found in uploaded photo.";
+                        dom.statusText.textContent = "No faces found in this picture.";
                         return;
                     }
 
-                    dom.statusText.textContent = `Extracted ${detections.length} source face vector structures.`;
+                    dom.statusText.textContent = `Extracted ${detections.length} face descriptors.`;
                     dom.faceSelectorWrapper.style.display = 'flex';
                     dom.btnResetSearch.style.display = 'flex';
 
-                    // Extract Crops for profile selection system
                     for (let i = 0; i < detections.length; i++) {
                         const det = detections[i];
                         const box = det.detection.box;
@@ -925,19 +856,12 @@
                         canvasThumb.height = 80;
                         const ctxThumb = canvasThumb.getContext('2d');
 
-                        // Execute local mathematical crop translation bounds matrix securely
-                        ctxThumb.drawImage(
-                            img,
-                            box.x, box.y, box.width, box.height,
-                            0, 0, 80, 80
-                        );
+                        ctxThumb.drawImage(img, box.x, box.y, box.width, box.height, 0, 0, 80, 80);
 
                         const thumbImg = document.createElement('img');
                         thumbImg.className = 'face-thumb';
                         thumbImg.src = canvasThumb.toDataURL();
-                        thumbImg.dataset.index = i;
                         
-                        // Event Execution Binding
                         thumbImg.addEventListener('click', () => {
                             document.querySelectorAll('.face-thumb').forEach(el => el.classList.remove('selected'));
                             thumbImg.classList.add('selected');
@@ -947,17 +871,12 @@
 
                         dom.facesThumbGrid.appendChild(thumbImg);
                     }
-
-                    // Auto select index 0 initially default
                     dom.facesThumbGrid.children[0].click();
                 };
             };
             reader.readAsDataURL(file);
         }
 
-        /**
-         * MATCH ENGINE CORE EUCLIDEAN DISTANCE COMPUTATION
-         */
         function executeFaceBiometricMatchingMatrix() {
             if (!appState.selectedTargetDescriptor) return;
 
@@ -974,24 +893,17 @@
                 let highMatchConfidence = 0;
                 let isMatchVerified = false;
 
-                // Loop descriptor array vectors for match verification
                 for (let det of matchesFoundInPhoto) {
-                    // Euclidean distance vector check: formula length of absolute distance vector spectrum 
                     const distance = faceapi.euclideanDistance(appState.selectedTargetDescriptor, det.descriptor);
                     if (distance <= CONFIG.DISTANCE_THRESHOLD) {
                         isMatchVerified = true;
-                        // Transform mathematical distance value configuration into direct intuitive percentile match confidence
                         const currentConfidence = Math.round((1 - distance) * 100);
-                        if (currentConfidence > highMatchConfidence) {
-                            highMatchConfidence = currentConfidence;
-                        }
+                        if (currentConfidence > highMatchConfidence) highMatchConfidence = currentConfidence;
                     }
                 }
 
-                // Update individual item architecture visual presentation states natively
                 const badge = card.querySelector('.match-badge');
                 const confidenceSpan = card.querySelector('.match-confidence');
-
                 card.classList.remove('match-active', 'match-failed');
                 
                 if (isMatchVerified) {
@@ -1002,20 +914,15 @@
                     card.classList.add('match-failed');
                 }
 
-                // Smooth background UI thread calculation ticks updating global orchestration progress meters
                 const currentPct = Math.round(((index + 1) / totalItems) * 100);
                 dom.progressPct.textContent = `${currentPct}%`;
                 dom.progressBarFill.style.width = `${currentPct}%`;
             });
 
             dom.statMatches.textContent = matchedElementsCounter;
-            
-            setTimeout(() => {
-                dom.progressContainer.style.display = 'none';
-            }, 800);
+            setTimeout(() => { dom.progressContainer.style.display = 'none'; }, 800);
         }
 
-        // Reset operational visual layouts back to structural defaults
         dom.btnResetSearch.addEventListener('click', () => {
             appState.selectedTargetDescriptor = null;
             dom.faceSelectorWrapper.style.display = 'none';
@@ -1028,9 +935,7 @@
             });
         });
 
-        /**
-         * FULLSCREEN LIGHTBOX MODE AND ADVANCED INTERFACES
-         */
+        /* --- LIGHTBOX MECHANICS --- */
         let currentZoomScale = 1;
         let isPanningActive = false;
         let panStartX = 0, panStartY = 0, currentPanX = 0, currentPanY = 0;
@@ -1038,10 +943,8 @@
         function launchLightbox(index) {
             if (index < 0 || index >= appState.galleryManifest.length) return;
             appState.activeLightboxIndex = index;
-            
             const targetUrl = appState.galleryManifest[index];
             
-            // Fade visual transition smoothness hooks active
             dom.lightboxImg.style.opacity = '0';
             dom.lightbox.classList.add('active');
 
@@ -1077,20 +980,15 @@
             document.body.removeChild(linkAnchor);
         }
 
-        // Event Handling Hooks setup
         dom.lbClose.addEventListener('click', closeLightbox);
         dom.lbPrev.addEventListener('click', () => navigateLightbox(-1));
         dom.lbNext.addEventListener('click', () => navigateLightbox(1));
         dom.lbDownload.addEventListener('click', downloadActiveOriginalAsset);
 
-        // Closing lightbox if clicking directly outside frame container areas
         dom.lightbox.addEventListener('click', (e) => {
-            if (e.target === dom.lightbox || e.target === dom.lbImgContainer) {
-                closeLightbox();
-            }
+            if (e.target === dom.lightbox || e.target === dom.lbImgContainer) closeLightbox();
         });
 
-        // Native System Keyboard Map Event Routing Hooks
         window.addEventListener('keydown', (e) => {
             if (appState.activeLightboxIndex !== -1) {
                 if (e.key === 'Escape') closeLightbox();
@@ -1099,31 +997,18 @@
             }
         });
 
-        /**
-         * EXPERT INTERACTION LEVEL WHEEL/PINCH ZOOM ARCHITECTURE HOOKS
-         */
         dom.lbImgContainer.addEventListener('wheel', (e) => {
             if (appState.activeLightboxIndex === -1) return;
             e.preventDefault();
+            if (e.deltaY < 0) currentZoomScale = Math.min(currentZoomScale + 0.1, 5);
+            else currentZoomScale = Math.max(currentZoomScale - 0.1, 1);
             
-            const zoomSpeedFactor = 0.1;
-            if (e.deltaY < 0) {
-                currentZoomScale = Math.min(currentZoomScale + zoomSpeedFactor, 5);
-            } else {
-                currentZoomScale = Math.max(currentZoomScale - zoomSpeedFactor, 1);
-            }
-            
-            if (currentZoomScale === 1) {
-                currentPanX = 0;
-                currentPanY = 0;
-            }
+            if (currentZoomScale === 1) { currentPanX = 0; currentPanY = 0; }
             applyTransformationMatrix();
         }, { passive: false });
 
         function resetZoomParameters() {
-            currentZoomScale = 1;
-            currentPanX = 0;
-            currentPanY = 0;
+            currentZoomScale = 1; currentPanX = 0; currentPanY = 0;
             applyTransformationMatrix();
         }
 
@@ -1131,7 +1016,6 @@
             dom.lightboxImg.style.transform = `translate(${currentPanX}px, ${currentPanY}px) scale(${currentZoomScale})`;
         }
 
-        // Panning operations execution routines via generic pointer events
         dom.lightboxImg.addEventListener('mousedown', (e) => {
             if (currentZoomScale > 1) {
                 isPanningActive = true;
@@ -1149,36 +1033,20 @@
             }
         });
 
-        window.addEventListener('mouseup', () => {
-            isPanningActive = false;
-        });
+        window.addEventListener('mouseup', () => isPanningActive = false);
 
-        // Mobile Smart Device Touch Swipe Navigation Configuration Architecture
         let touchSwipeStartX = 0;
-        dom.lightbox.addEventListener('touchstart', (e) => {
-            touchSwipeStartX = e.changedTouches[0].clientX;
-        }, { passive: true });
-
+        dom.lightbox.addEventListener('touchstart', (e) => touchSwipeStartX = e.changedTouches[0].clientX, { passive: true });
         dom.lightbox.addEventListener('touchend', (e) => {
-            if (currentZoomScale > 1) return; // ignore swipe gestures when zoomed in
-            let touchSwipeEndX = e.changedTouches[0].clientX;
-            let swipeDeltaX = touchSwipeEndX - touchSwipeStartX;
-            
+            if (currentZoomScale > 1) return;
+            let swipeDeltaX = e.changedTouches[0].clientX - touchSwipeStartX;
             if (Math.abs(swipeDeltaX) > 60) {
-                if (swipeDeltaX > 0) {
-                    navigateLightbox(-1); // Swiped to right -> load previous item asset
-                } else {
-                    navigateLightbox(1);  // Swiped to left -> load next item asset
-                }
+                if (swipeDeltaX > 0) navigateLightbox(-1);
+                else navigateLightbox(1);
             }
         }, { passive: true });
 
-
-        /**
-         * ENTRY POINT METHOD ARCHITECTURE LIFECYCLE LOAD CALLS
-         */
         window.addEventListener('DOMContentLoaded', async () => {
-            // Concurrent task launching profiles optimization sequence
             await loadNeuralModels();
             await discoverGalleryAssets();
         });
