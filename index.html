@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mythos Running - Thư viện Ảnh 04/06/2026 </title>
-    <!-- Google Fonts: Inter -->
+    <title>Mythos Running Club - Face Search Gallery</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- SỬ DỤNG BẢN PHÂN PHỐI CHUẨN ĐỂ ĐỒNG BỘ ĐƯỜNG DẪN MODEL -->
-    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+    <script src="https://unpkg.com/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
     <style>
         :root {
@@ -538,7 +535,6 @@
     </header>
 
     <main>
-        <!-- CONTROLS PANEL -->
         <aside class="control-panel">
             <div class="panel-title">
                 <i class="fa-solid fa-brain"></i>
@@ -591,7 +587,6 @@
             </button>
         </aside>
 
-        <!-- GALLERY WORKspace -->
         <section class="gallery-container">
             <div class="grid-layout" id="gallery-grid">
                 <div class="empty-gallery-msg" id="initial-loading-view">
@@ -602,7 +597,6 @@
         </section>
     </main>
 
-    <!-- LIGHTBOX MODAL -->
     <div class="lightbox-modal" id="lightbox-modal">
         <div class="lightbox-content-wrapper">
             <button class="lightbox-ui-btn btn-close-lightbox" id="lb-close" title="Close (Esc)"><i class="fa-solid fa-xmark"></i></button>
@@ -619,7 +613,7 @@
         const CONFIG = {
             DISTANCE_THRESHOLD: 0.5,
             IMAGE_DIRECTORY: '/images',
-            MAX_SCAN_FALLBACK_INDEX: 200 // Quét từ 1.jpg đến 50.jpg, đổi số này tăng lên nếu bạn có nhiều ảnh hơn
+            MAX_SCAN_FALLBACK_INDEX: 150 // Tự động quyét từ 1.jpg tới 150.jpg (đủ cho 124 ảnh của bạn)
         };
 
         let appState = {
@@ -654,12 +648,11 @@
             lbImgContainer: document.getElementById('lb-img-container')
         };
 
-        // ĐỒNG BỘ THẲNG FILE TĨNH TRÊN VERCEL SERVER
+        // ĐỒNG BỘ ĐƯỜNG DẪN FILE TĨNH
         async function discoverGalleryAssets() {
             const extensions = ['jpg', 'jpeg', 'png', 'webp'];
             const discoveryStack = [];
             
-            // Quét tìm các file ảnh đã đánh số thứ tự trong folder /images
             for (let i = 1; i <= CONFIG.MAX_SCAN_FALLBACK_INDEX; i++) {
                 extensions.forEach(ext => {
                     discoveryStack.push(probeImageUrl(`${CONFIG.IMAGE_DIRECTORY}/${i}.${ext}`));
@@ -690,7 +683,7 @@
                         <i class="fa-solid fa-images"></i>
                         <p>No images found in <code>/images</code> directory.</p>
                         <p style="font-size:0.75rem; color: var(--text-secondary); margin-top:0.5rem;">
-                           Make sure your images are named 1.jpg, 2.jpg, 3.png etc. inside the /images folder.
+                           Make sure your images are named 1.jpg to 124.jpg inside the /images folder.
                         </p>
                     </div>`;
                 return;
@@ -736,17 +729,16 @@
             lazyImages.forEach(img => observer.observe(img));
         }
 
-        // TẢI CHUẨN HOÁ AI MODEL QUA CDN KHÔNG BỊ CHẶN CORS TRÊN VERCEL
-        // TẢI MODEL NỘI BỘ TỪ SERVER VERCEL - KHÔNG LO BỊ CHẶN MẠNG QUỐC TẾ
+        // GIẢI PHÁP CDN UNPKG SIÊU TỐC - KHÔNG LO LỖI MIME HOẶC CHẶN FILE TRÊN VERCEL
         async function loadNeuralModels() {
             try {
-                // Đường dẫn trỏ thẳng vào thư mục /models nằm trong project của bạn
-                const MODEL_URL = './models';
+                // Điểm cuối CDN chuyên dụng, mở quyền truy cập CORS cho môi trường Vercel toàn cầu
+                const MODEL_URL = 'https://unpkg.com/face-api.js@0.22.2/weights';
                 
-                await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
-                await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-                await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-        
+                await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
+                await faceapi.loadFaceLandmarkModel(MODEL_URL);
+                await faceapi.loadFaceRecognitionModel(MODEL_URL);
+
                 appState.isEngineReady = true;
                 dom.statusDot.classList.add('ready');
                 dom.statusText.textContent = "AI Face Engine Active & Live";
