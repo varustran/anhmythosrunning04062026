@@ -732,13 +732,13 @@
         // GIẢI PHÁP CDN UNPKG SIÊU TỐC - KHÔNG LO LỖI MIME HOẶC CHẶN FILE TRÊN VERCEL
         async function loadNeuralModels() {
             try {
-                // Điểm cuối CDN chuyên dụng, mở quyền truy cập CORS cho môi trường Vercel toàn cầu
+                // Gọi trực tiếp kho tổng đã được cấu hình tối ưu cấu trúc file shard
                 const MODEL_URL = 'https://unpkg.com/face-api.js@0.22.2/weights';
                 
-                await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
-                await faceapi.loadFaceLandmarkModel(MODEL_URL);
-                await faceapi.loadFaceRecognitionModel(MODEL_URL);
-
+                await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+                await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+        
                 appState.isEngineReady = true;
                 dom.statusDot.classList.add('ready');
                 dom.statusText.textContent = "AI Face Engine Active & Live";
