@@ -8,85 +8,85 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
 
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-            --glass-bg: rgba(30, 41, 59, 0.5);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            --accent-hover: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-            --success-glow: 0 0 25px rgba(34, 197, 94, 0.6);
-            --success-border: #22c55e;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-gradient: linear-gradient(135deg, #050508 0%, #0b0f19 100%);
+            --panel-bg: rgba(15, 22, 36, 0.7);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --accent-blue: linear-gradient(90deg, #1e40af, #3b82f6);
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --match-success: #10b981;
+            --match-glow: rgba(16, 185, 129, 0.6);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
+            user-select: none;
         }
 
         body {
+            font-family: 'Inter', sans-serif;
             background: var(--bg-gradient);
-            color: var(--text-main);
+            color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* Glassmorphism utility */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-        }
-
-        /* Header Layout */
+        /* --- HEADER --- */
         header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--glass-border);
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(5, 5, 8, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-glass);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
         }
 
-        .brand {
+        .header-brand {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .brand img {
+        .header-brand img {
             height: 45px;
-            width: auto;
             object-fit: contain;
         }
 
-        .brand h1 {
+        .header-brand h1 {
             font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.025em;
-            background: linear-gradient(to right, #ffffff, #94a3b8);
+            background: linear-gradient(180deg, #ffffff 0%, #a5b4fc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Main Workspace Container */
+        .header-underline {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+
+        /* --- MAIN LAYOUT --- */
         main {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 2rem auto;
-            padding: 0 1.5rem;
+            padding: 0 2rem;
             display: grid;
             grid-template-columns: 380px 1fr;
             gap: 2rem;
@@ -98,764 +98,1090 @@
             }
         }
 
-        /* Control Panel / Sidebar */
-        .search-sidebar {
+        /* --- CONTROL PANEL (SIDEBAR) --- */
+        .control-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
-            align-self: start;
+            height: fit-content;
             position: sticky;
             top: 100px;
-        }
-
-        .panel-padding {
-            padding: 1.5rem;
         }
 
         .panel-title {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: #f1f5f9;
+            color: #fff;
         }
 
-        /* System Status / Init Tracker */
-        #system-status {
-            font-size: 0.85rem;
-            padding: 0.75rem 1rem;
+        /* Model Loading Status */
+        .status-container {
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
+            padding: 0.75rem 1rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            background: rgba(234, 179, 8, 0.1);
-            border: 1px solid rgba(234, 179, 8, 0.2);
-            color: #fde047;
+            gap: 0.75rem;
+            font-size: 0.85rem;
         }
 
-        #system-status.ready {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            color: #4ade80;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ef4444;
         }
 
-        /* Dropzone Component */
+        .status-dot.ready {
+            background: var(--match-success);
+            box-shadow: 0 0 8px var(--match-success);
+        }
+
+        /* Upload Target Area */
         .upload-zone {
-            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border: 2px dashed rgba(59, 130, 246, 0.3);
             border-radius: 12px;
             padding: 2rem 1rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            background: rgba(15, 23, 42, 0.3);
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.01);
         }
 
         .upload-zone:hover {
             border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.05);
+            background: rgba(59, 130, 246, 0.04);
+            box-shadow: inset 0 0 15px rgba(59, 130, 246, 0.1);
         }
 
         .upload-zone i {
-            font-size: 2.5rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            transition: color 0.3s;
-        }
-
-        .upload-zone:hover i {
+            font-size: 2rem;
             color: #3b82f6;
+            margin-bottom: 0.75rem;
         }
 
-        .upload-zone input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
+        .upload-zone p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
 
-        /* Crop & Picker Layout */
-        .face-picker-container {
-            margin-top: 1.5rem;
+        #file-input {
             display: none;
         }
 
-        .face-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        /* Detected Faces Preview Selection */
+        .face-selector-wrapper {
+            display: flex;
+            flex-direction: column;
             gap: 0.75rem;
-            margin-top: 0.75rem;
         }
 
-        .face-thumb-wrapper {
-            position: relative;
-            aspect-ratio: 1;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-            background: #020617;
-        }
-
-        .face-thumb-wrapper:hover {
-            transform: scale(1.05);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .face-thumb-wrapper.selected {
-            border-color: #3b82f6;
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.6);
+        .faces-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 2px;
         }
 
         .face-thumb {
-            width: 100%;
-            height: 100%;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
             object-fit: cover;
+            transition: all 0.2s ease;
+            background: rgba(0,0,0,0.5);
         }
 
-        /* Engine Log Tracking Feedback */
-        .search-progress-box {
-            display: none;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(15, 23, 42, 0.6);
+        .face-thumb:hover {
+            transform: scale(1.05);
+            border-color: #3b82f6;
+        }
+
+        .face-thumb.selected {
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px var(--accent-glow);
+            transform: scale(1.05);
+        }
+
+        /* Global Match Statistics */
+        .stats-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 8px;
-            font-size: 0.85rem;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stat-lbl {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Process Progress Bar */
+        .search-progress-container {
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .progress-bar-bg {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             height: 6px;
             border-radius: 3px;
-            margin-top: 0.5rem;
             overflow: hidden;
         }
 
         .progress-bar-fill {
-            background: var(--accent-primary);
             height: 100%;
             width: 0%;
-            transition: width 0.1s ease;
+            background: var(--accent-blue);
+            box-shadow: 0 0 8px #3b82f6;
+            transition: width 0.1s linear;
         }
 
-        /* Global Controls Section */
-        .actions-box {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn {
-            flex: 1;
-            background: var(--accent-primary);
-            color: white;
-            border: none;
-            padding: 0.75rem 1rem;
+        /* Reset Button */
+        .btn-reset {
+            background: transparent;
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            padding: 0.6rem;
             border-radius: 8px;
-            font-weight: 500;
             cursor: pointer;
-            display: inline-flex;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            transition: all 0.2s;
-            text-decoration: none;
         }
 
-        .btn:hover:not(:disabled) {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            background: #334155;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-        }
-
-        .btn-secondary:hover:not(:disabled) {
+        .btn-reset:hover {
             background: rgba(255, 255, 255, 0.05);
+            color: #fff;
         }
 
-        /* Gallery Grid Workspace */
+        /* --- GALLERY WORKSPACE --- */
         .gallery-container {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
-        .gallery-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-        }
-
-        .counter-badge {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        .gallery-grid {
+        /* Grid Configuration */
+        .grid-layout {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-auto-rows: 220px;
             gap: 1.5rem;
         }
 
-        /* Image Card Components */
-        .photo-card {
+        /* Modern Card Element */
+        .gallery-card {
             position: relative;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-glass);
             border-radius: 12px;
             overflow: hidden;
-            aspect-ratio: 4/3;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            background: #0f172a;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateZ(0);
         }
 
-        .photo-card img {
+        /* Grid Item Spans to create an asymmetric layout flow */
+        .gallery-card:nth-child(5n+1) {
+            grid-column: span 1;
+            grid-row: span 2;
+        }
+        .gallery-card:nth-child(5n+3) {
+            grid-column: span 2;
+            grid-row: span 1;
+        }
+
+        @media (max-width: 640px) {
+            .gallery-card:nth-child(5n+1),
+            .gallery-card:nth-child(5n+3) {
+                grid-column: span 1 !important;
+                grid-row: span 1 !important;
+            }
+            .grid-layout {
+                grid-auto-rows: 250px;
+            }
+        }
+
+        .gallery-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        .photo-card:hover img {
+        .gallery-card:hover img {
             transform: scale(1.06);
         }
 
-        /* Match Glowing Overlay States */
-        .photo-card.matched {
-            border: 3px solid var(--success-border);
-            box-shadow: var(--success-glow);
-            transform: scale(1.02);
-            z-index: 10;
-        }
-
-        .photo-card.not-matched {
-            opacity: 0.25;
-            filter: grayscale(80%);
-        }
-
-        .card-meta {
+        /* Overlay Meta Info */
+        .card-overlay {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(2, 6, 23, 0.9));
-            padding: 1.25rem 1rem 0.75rem 1rem;
+            inset: 0;
+            background: linear-gradient(to top, rgba(5,5,8,0.8) 0%, rgba(5,5,8,0) 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            align-items: flex-end;
+            padding: 1rem;
         }
 
-        .photo-card:hover .card-meta, 
-        .photo-card.matched .card-meta {
-            transform: translateY(0);
+        .gallery-card:hover .card-overlay {
+            opacity: 1;
         }
 
-        .card-title {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #f8fafc;
+        .card-filename {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-            max-width: 70%;
+            width: 100%;
         }
 
-        .match-score {
+        /* Match States indicators */
+        .gallery-card.searching {
+            opacity: 0.6;
+        }
+
+        .gallery-card.match-active {
+            border-color: var(--match-success);
+            box-shadow: 0 0 20px var(--match-glow);
+        }
+
+        .gallery-card.match-failed {
+            opacity: 0.25;
+            filter: grayscale(0.8);
+        }
+
+        .match-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--match-success);
+            color: #fff;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
-            background: #22c55e;
-            color: #052e16;
-            padding: 0.15rem 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+        }
+
+        .gallery-card.match-active .match-badge {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Card Card Skeleton Loader */
+        .skeleton {
+            background: linear-gradient(90deg, #0f1624 25%, #1e293b 50%, #0f1624 75%);
+            background-size: 200% 100%;
+            animation: loading-skeleton 1.5s infinite;
+        }
+
+        @keyframes loading-skeleton {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* --- LIGHTBOX MODAL --- */
+        .lightbox-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(4, 5, 7, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content-wrapper {
+            position: relative;
+            width: 90vw;
+            height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-img-container {
+            max-width: 100%;
+            max-height: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
             border-radius: 4px;
+            transform: scale(1);
+            transition: transform 0.1s ease-out, opacity 0.2s ease;
+            cursor: grab;
         }
 
-        /* Pulse Animations */
-        .pulse-icon {
-            animation: pulse 2s infinite;
+        .lightbox-image:active {
+            cursor: grabbing;
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
+        /* Controls UI Overlay */
+        .lightbox-ui-btn {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.2s ease;
+            z-index: 1010;
+            backdrop-filter: blur(4px);
+        }
+
+        .lightbox-ui-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        .btn-close-lightbox { top: -40px; right: 0; }
+        .btn-download-lightbox { top: -40px; right: 60px; }
+        .btn-prev-lightbox { left: 20px; top: 50%; transform: translateY(-50%); }
+        .btn-next-lightbox { right: 20px; top: 50%; transform: translateY(-50%); }
+
+        @media (max-width: 768px) {
+            .btn-prev-lightbox { left: 5px; }
+            .btn-next-lightbox { right: 5px; }
+            .lightbox-content-wrapper { width: 98vw; }
+        }
+
+        /* Face Analysis Overlays inside Grid Card */
+        .analysis-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Empty Info Banner */
+        .empty-gallery-msg {
+            grid-column: 1 / -1;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: var(--panel-bg);
+            border: 1px dashed var(--border-glass);
+            border-radius: 12px;
+            color: var(--text-secondary);
+        }
+
+        .empty-gallery-msg i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: rgba(255,255,255,0.1);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand">
-            <img src="logo.png" alt="Mythos Logo" onerror="this.src='https://placehold.co/150x50/1e293b/ffffff?text=Mythos+RC'">
+        <div class="header-brand">
+            <img src="logo.png" alt="Club Logo" onerror="this.style.display='none';">
             <h1>Mythos Running Club Gallery</h1>
         </div>
-        <div class="counter-badge" id="global-stats">System Idle</div>
+        <div class="header-underline"></div>
     </header>
 
     <main>
-        <section class="search-sidebar">
-            <div class="glass-panel panel-padding">
-                <div class="panel-title">
-                    <i class="fa-solid fa-brain text-blue-500"></i>
-                    <span>AI Recognition Engine</span>
-                </div>
-                
-                <div id="system-status">
-                    <i class="fa-solid fa-circle-notch fa-spin"></i>
-                    <span id="status-text">Booting core libraries...</span>
-                </div>
+        <aside class="control-panel">
+            <div class="panel-title">
+                <i class="fa-solid to fa-brain-circuit"></i>
+                <span>Face Engine Control</span>
+            </div>
 
-                <div class="upload-zone" id="dropzone">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <p style="font-weight: 500; font-size: 0.95rem; margin-bottom: 0.25rem;">Upload Reference Face</p>
-                    <p style="color: var(--text-muted); font-size: 0.8rem;">Drag & drop or click to browse</p>
-                    <input type="file" id="user-photo-input" accept="image/*" disabled>
-                </div>
+            <div class="status-container">
+                <div class="status-dot" id="engine-status-dot"></div>
+                <span id="engine-status-text">Initializing AI Engine...</span>
+            </div>
 
-                <div class="face-picker-container" id="picker-area">
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
-                        <i class="fa-solid fa-crosshairs"></i> Select identity to search for:
-                    </p>
-                    <div class="face-grid" id="detected-faces-pool"></div>
-                </div>
+            <div class="upload-zone" id="drop-zone">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p style="font-weight: 500; color:#fff; margin-bottom: 4px;">Upload Search Profile Target</p>
+                <p>Drag and drop or click to browse</p>
+                <input type="file" id="file-input" accept="image/*">
+            </div>
 
-                <div class="search-progress-box" id="engine-progress-panel">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem;" id="progress-text-container">
-                        <span style="color: var(--text-muted);" id="progress-step-lbl">Processing...</span>
-                        <span style="font-weight: 600;" id="progress-percent-lbl">0%</span>
+            <div class="face-selector-wrapper" id="face-selector-wrapper" style="display: none;">
+                <p class="panel-title" style="font-size: 0.85rem; color: var(--text-secondary);">
+                    Multiple faces detected. Select targeted runner identity:
+                </p>
+                <div class="faces-grid" id="faces-thumbnail-grid">
                     </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" id="progress-bar-core"></div>
-                    </div>
+            </div>
+
+            <div class="stats-display">
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-total">0</div>
+                    <div class="stat-lbl">Total Photos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-matches">-</div>
+                    <div class="stat-lbl">Identified Matches</div>
                 </div>
             </div>
 
-            <div class="glass-panel panel-padding actions-box">
-                <button class="btn btn-secondary" id="reset-search-btn" disabled>
-                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset
-                </button>
-                <button class="btn" id="execute-search-btn" disabled>
-                    <i class="fa-solid fa-magnifying-glass"></i> Find Matches
-                </button>
+            <div class="search-progress-container" id="search-progress-container">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                    <span style="color: var(--text-secondary);" id="progress-phase-label">Matching descriptors...</span>
+                    <span font-weight: 600; id="progress-pct">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                </div>
             </div>
-        </section>
+
+            <button class="btn-reset" id="btn-reset-search" style="display: none;">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                Clear Search Filter
+            </button>
+        </aside>
 
         <section class="gallery-container">
-            <div class="glass-panel gallery-toolbar">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <span style="font-weight: 600; font-size: 1.1rem;">Club Photo Stream</span>
-                    <span class="counter-badge" id="total-assets-count">0 files detected</span>
-                </div>
-                <div id="match-counter-display" style="font-size: 0.9rem; font-weight: 500; color: #4ade80; display: none;">
-                    <i class="fa-solid fa-square-check"></i> Found <span id="match-count-val">0</span> photos matching your identity
+            <div class="grid-layout" id="gallery-grid">
+                <div class="empty-gallery-msg" id="initial-loading-view">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <p>Scanning local storage directory asset matrix...</p>
                 </div>
             </div>
-
-            <div class="gallery-grid" id="main-photo-grid-stream">
-                </div>
         </section>
     </main>
 
+    <div class="lightbox-modal" id="lightbox-modal">
+        <div class="lightbox-content-wrapper">
+            <button class="lightbox-ui-btn btn-close-lightbox" id="lb-close" title="Close (Esc)"><i class="fa-solid fa-xmark"></i></button>
+            <button class="lightbox-ui-btn btn-download-lightbox" id="lb-download" title="Download Original"><i class="fa-solid fa-download"></i></button>
+            
+            <button class="lightbox-ui-btn btn-prev-lightbox" id="lb-prev" title="Previous KeyLeft"><i class="fa-solid fa-chevron-left"></i></button>
+            
+            <div class="lightbox-img-container" id="lb-img-container">
+                <img src="" alt="Enlarged View" class="lightbox-image" id="lightbox-image" draggable="false">
+            </div>
+            
+            <button class="lightbox-ui-btn btn-next-lightbox" id="lb-next" title="Next KeyRight"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
     <script>
         /**
-         * STATIC MANIFEST IMAGES REFERENCE ARRAY
-         * Configure here the local paths of images residing inside your project’s /images directory.
-         * The framework automatically hooks these files for the asynchronous deep learning runtime scan ecosystem.
+         * PRODUCTION CONFIG CONSTANTS
          */
-        const TRACKED_GALLERY_IMAGES = [
-            'images/run1.jpg',
-            'images/run2.jpg',
-            'images/run3.jpg',
-            'images/run4.jpg',
-            'images/run5.jpg',
-            'images/run6.jpg',
-            'images/run7.jpg',
-            'images/run8.jpg'
-        ];
-
-        // Production-Ready Model Weight Endpoints mapped directly via Vladmandic standard optimized CDN architectures
-        const CDN_MODEL_BASE = "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
-
-        // State Machine Context Engine
-        const SystemState = {
-            modelsReady: false,
-            uploadedImageElement: null,
-            detectedFaceDescriptors: [],
-            selectedFaceIndex: null,
-            galleryDescriptorsMap: new Map(), // Mapping file paths directly to compiled extraction results
-            matchThreshold: 0.50
+        const CONFIG = {
+            DISTANCE_THRESHOLD: 0.5, // strict biometric distance matching threshold
+            IMAGE_DIRECTORY: '/images',
+            MAX_SCAN_FALLBACK_INDEX: 100 // Dynamic discovery up to 100 images sequential scanning approach if fallback manifest isn't deployed
         };
 
-        // Execution DOM Architecture Selectors
-        const DOM = {
-            statusBox: document.getElementById('system-status'),
-            statusText: document.getElementById('status-text'),
-            fileInput: document.getElementById('user-photo-input'),
-            dropzone: document.getElementById('dropzone'),
-            pickerArea: document.getElementById('picker-area'),
-            facesPool: document.getElementById('detected-faces-pool'),
-            progressPanel: document.getElementById('engine-progress-panel'),
-            progressLabel: document.getElementById('progress-step-lbl'),
-            progressPercent: document.getElementById('progress-percent-lbl'),
-            progressBar: document.getElementById('progress-bar-core'),
-            btnSearch: document.getElementById('execute-search-btn'),
-            btnReset: document.getElementById('reset-search-btn'),
-            galleryGrid: document.getElementById('main-photo-grid-stream'),
-            totalAssetsCount: document.getElementById('total-assets-count'),
-            matchCounterDisplay: document.getElementById('match-counter-display'),
-            matchCountVal: document.getElementById('match-count-val'),
-            globalStats: document.getElementById('global-stats')
+        // State Machine Storage
+        let appState = {
+            isEngineReady: false,
+            galleryManifest: [], // Holds absolute URLs or discoverable image file indices
+            computedDescriptors: {}, // Key: image source, Value: arrays of descriptors found
+            selectedTargetDescriptor: null, // User selected single vector array configuration
+            activeLightboxIndex: -1
         };
 
-        // Application Lifecycles Entry point
-        window.addEventListener('DOMContentLoaded', async () => {
-            initializeLayoutPlaceholderGallery();
-            await bootNeuralPipelines();
-        });
+        // DOM Pointers
+        const dom = {
+            statusDot: document.getElementById('engine-status-dot'),
+            statusText: document.getElementById('engine-status-text'),
+            dropZone: document.getElementById('drop-zone'),
+            fileInput: document.getElementById('file-input'),
+            faceSelectorWrapper: document.getElementById('face-selector-wrapper'),
+            facesThumbGrid: document.getElementById('faces-thumbnail-grid'),
+            statTotal: document.getElementById('stat-total'),
+            statMatches: document.getElementById('stat-matches'),
+            progressContainer: document.getElementById('search-progress-container'),
+            progressLabel: document.getElementById('progress-phase-label'),
+            progressPct: document.getElementById('progress-pct'),
+            progressBarFill: document.getElementById('progress-bar-fill'),
+            btnResetSearch: document.getElementById('btn-reset-search'),
+            galleryGrid: document.getElementById('gallery-grid'),
+            lightbox: document.getElementById('lightbox-modal'),
+            lightboxImg: document.getElementById('lightbox-image'),
+            lbClose: document.getElementById('lb-close'),
+            lbDownload: document.getElementById('lb-download'),
+            lbPrev: document.getElementById('lb-prev'),
+            lbNext: document.getElementById('lb-next'),
+            lbImgContainer: document.getElementById('lb-img-container')
+        };
 
-        // Initialize Static Layout Elements Previews
-        function initializeLayoutPlaceholderGallery() {
-            DOM.galleryGrid.innerHTML = '';
-            DOM.totalAssetsCount.textContent = `${TRACKED_GALLERY_IMAGES.length} photos trackable`;
+        /**
+         * AUTOMATED DIRECTORY DISCOVERY OVER VERCEL (RUNTIME RUN)
+         * Since client-side static hosts can't perform 'fs.readdir', we run a non-blocking asynchronous multi-thread ping profile
+         * into /images folder sequence using common image formats or an optimized layout strategy.
+         */
+        async function discoverGalleryAssets() {
+            const commonExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+            const discoveryStack = [];
             
-            TRACKED_GALLERY_IMAGES.forEach((imagePath, index) => {
+            // Generate matrix scan promises
+            // Scans systematically numbered images: 1, 2, 3... up to threshold
+            for (let i = 1; i <= CONFIG.MAX_SCAN_FALLBACK_INDEX; i++) {
+                for (let ext of commonExtensions) {
+                    const url = `${CONFIG.IMAGE_DIRECTORY}/${i}.${ext}`;
+                    discoveryStack.push(probeImageUrl(url));
+                }
+            }
+
+            // Also probe common default generic file patterns if sequentially labeled items are not found
+            const specificFilenames = ['photo1.jpg','photo2.jpg','photo3.jpg','photo4.jpg','photo5.jpg','run1.jpg','run2.jpg','run3.jpg','run4.jpg'];
+            specificFilenames.forEach(name => {
+                discoveryStack.push(probeImageUrl(`${CONFIG.IMAGE_DIRECTORY}/${name}`));
+            });
+
+            const results = await Promise.all(discoveryStack);
+            appState.galleryManifest = results.filter(url => url !== null);
+            
+            // Remove duplicates
+            appState.galleryManifest = [...new Set(appState.galleryManifest)];
+            
+            dom.statTotal.textContent = appState.galleryManifest.length;
+            renderGalleryBaseGrid();
+        }
+
+        function probeImageUrl(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(url);
+                img.onerror = () => resolve(null);
+                img.src = url;
+            });
+        }
+
+        /**
+         * RENDER BASE CONTAINER CARDS
+         */
+        function renderGalleryBaseGrid() {
+            if (appState.galleryManifest.length === 0) {
+                dom.galleryGrid.innerHTML = `
+                    <div class="empty-gallery-msg">
+                        <i class="fa-solid fa-images"></i>
+                        <p>No valid assets detected within the runtime directory <code>/images</code> folder.</p>
+                        <p style="font-size:0.75rem; color: var(--text-secondary); margin-top:0.5rem;">Please check that your project deployment contains images named 1.jpg, 2.jpg etc. directly within the static subfolder matrix.</p>
+                    </div>`;
+                return;
+            }
+
+            dom.galleryGrid.innerHTML = '';
+            appState.galleryManifest.forEach((imgUrl, index) => {
                 const card = document.createElement('div');
-                card.className = 'photo-card glass-panel';
-                card.dataset.path = imagePath;
+                card.className = 'gallery-card';
                 card.dataset.index = index;
+                card.dataset.src = imgUrl;
 
-                const img = document.createElement('img');
-                img.src = imagePath;
-                img.alt = `Gallery Item ${index + 1}`;
-                img.loading = 'lazy';
-                // Inline placeholder error fallback routine architecture handling gracefully missing static assets assets
-                img.onerror = () => {
-                    img.src = `https://placehold.co/600x450/1e293b/ffffff?text=Image+Not+Found`;
-                };
-
-                const meta = document.createElement('div');
-                meta.className = 'card-meta';
-                
-                // Truncated clean processing filename parsing
-                const filename = imagePath.split('/').pop();
-                meta.innerHTML = `
-                    <span class="card-title">${filename}</span>
-                    <span class="match-score" style="display:none;">Match</span>
+                card.innerHTML = `
+                    <div class="match-badge"><i class="fa-solid fa-user-check"></i><span class="match-confidence">0%</span></div>
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="skeleton" data-src="${imgUrl}" alt="Gallery running event frame">
+                    <canvas class="analysis-canvas"></canvas>
+                    <div class="card-overlay">
+                        <div class="card-filename">${imgUrl.substring(imgUrl.lastIndexOf('/') + 1)}</div>
+                    </div>
                 `;
 
-                card.appendChild(img);
-                card.appendChild(meta);
-                DOM.galleryGrid.appendChild(card);
+                card.addEventListener('click', () => launchLightbox(index));
+                dom.galleryGrid.appendChild(card);
             });
+
+            initializeLazyLoading();
+            // Fire non-blocking asynchronous global processing system pipeline
+            triggerBackgroundNeuralScan();
         }
 
-        // Parallel Booting Strategy of Weights Architecture Components via Asynchronous Execution
-        async function bootNeuralPipelines() {
+        /**
+         * INTERSECTION OBSERVER LAZY LOADER INFRASTRUCTURE
+         */
+        function initializeLazyLoading() {
+            const lazyImages = document.querySelectorAll('.gallery-card img[data-src]');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.onload = () => {
+                            img.classList.remove('skeleton');
+                        };
+                        observer.unobserve(img);
+                    }
+                });
+            }, { rootMargin: '200px 0px' });
+
+            lazyImages.forEach(img => observer.observe(img));
+        }
+
+        /**
+         * FACE-API AI RECOGNITION PIPELINE ENGINE ENGINE INTIALIZATION
+         */
+        async function loadNeuralModels() {
             try {
-                updateEngineStatus('Loading weights architecture components...', false);
+                const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
                 
-                // Execute simultaneous CDN downloads via face-api.js core pipeline configurations
+                // Concurrent model load array setup
                 await Promise.all([
-                    faceapi.nets.ssdMobilenetv1.loadFromUri(CDN_MODEL_BASE),
-                    faceapi.nets.faceLandmarks68Net.loadFromUri(CDN_MODEL_BASE),
-                    faceapi.nets.faceRecognitionNet.loadFromUri(CDN_MODEL_BASE)
+                    faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
                 ]);
 
-                SystemState.modelsReady = true;
-                DOM.statusBox.className = 'ready';
-                DOM.statusText.textContent = "AI Engine Active & Primed";
-                DOM.globalStats.textContent = "Engine Ready";
-                DOM.fileInput.removeAttribute('disabled');
-                
-                setupControlPanelEventListeners();
+                appState.isEngineReady = true;
+                dom.statusDot.classList.add('ready');
+                dom.statusText.textContent = "AI Face Engine Active & Live";
             } catch (err) {
-                console.error("Critical Model Initialization Failure Event Occurred: ", err);
-                DOM.statusText.textContent = "Failed initialization models base weights. Check network connection paths.";
-                DOM.statusBox.style.background = "rgba(239, 68, 68, 0.1)";
-                DOM.statusBox.style.borderColor = "rgba(239, 68, 68, 0.2)";
-                DOM.statusBox.style.color = "#f87171";
+                console.error("Critical Model Initialization Pipeline Interruption Sequence Error: ", err);
+                dom.statusText.textContent = "Error Initialization Neural Models";
+                dom.statusText.style.color = "#ef4444";
             }
         }
 
-        function updateEngineStatus(msg, isCompleted = false) {
-            DOM.statusText.textContent = msg;
-            DOM.globalStats.textContent = msg;
-        }
-
-        function setupControlPanelEventListeners() {
-            // Setup Upload Event System Interactivity mapping
-            DOM.fileInput.addEventListener('change', handleSourceIdentitySelectionFile);
-            
-            DOM.dropzone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                DOM.dropzone.style.borderColor = '#3b82f6';
-            });
-
-            DOM.dropzone.addEventListener('dragleave', () => {
-                DOM.dropzone.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-            });
-
-            DOM.dropzone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                DOM.dropzone.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                    DOM.fileInput.files = e.dataTransfer.files;
-                    handleSourceIdentitySelectionFile();
-                }
-            });
-
-            // Action triggers registration layout interface mapping
-            DOM.btnSearch.addEventListener('click', executeParallelGalleryFacialScan);
-            DOM.btnReset.addEventListener('click', hardResetSearchEngineWorkspaceUX);
-        }
-
-        // Image Selection Extraction Preprocessing Layout Pipeline Engine logic routing
-        async function handleSourceIdentitySelectionFile() {
-            const file = DOM.fileInput.files[0];
-            if (!file) return;
-
-            // Reset workspace interface variables state parameters cleanly
-            clearDetectedFacesPreviewPool();
-            resetGalleryCardsVisualStates();
-
-            updateEngineStatus("Analyzing uploaded face data...", false);
-            DOM.progressPanel.style.display = 'block';
-            updateProgressBarUI("Detecting structural landmarks...", 25);
-
-            try {
-                // Parse file element configuration dynamically onto native Image element wrappers mapping pipeline
-                const imageElement = await faceapi.bufferToImage(file);
-                SystemState.uploadedImageElement = imageElement;
-
-                // Fire computational facial detection algorithm architecture models configuration definitions runtimes
-                const extractions = await faceapi.detectAllFaces(imageElement)
-                                                 .withFaceLandmarks()
-                                                 .withFaceDescriptors();
-
-                SystemState.detectedFaceDescriptors = extractions;
-
-                if (extractions.length === 0) {
-                    updateEngineStatus("Zero faces detected in source reference. Try another file.", false);
-                    updateProgressBarUI("Execution terminated", 0);
-                    return;
-                }
-
-                updateEngineStatus(`Identified ${extractions.length} face signatures inside matrix context.`, true);
-                updateProgressBarUI("Rendering face bounding parameters...", 100);
-                setTimeout(() => { DOM.progressPanel.style.display = 'none'; }, 1000);
-
-                // Render components inside selection matrix context
-                DOM.pickerArea.style.display = 'block';
-                
-                for (let i = 0; i < extractions.length; i++) {
-                    const detection = extractions[i].detection;
-                    const box = detection.box;
-
-                    // Dynamically generate Canvas object to draw cropped thumbnails
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = 120;
-                    canvas.height = 120;
-
-                    // Expand bounds slightly to crop a cleaner face thumbnail preview
-                    const padding = 0.1;
-                    const sourceX = Math.max(0, box.x - box.width * padding);
-                    const sourceY = Math.max(0, box.y - box.height * padding);
-                    const sourceWidth = Math.min(imageElement.width - sourceX, box.width * (1 + padding * 2));
-                    const sourceHeight = Math.min(imageElement.height - sourceY, box.height * (1 + padding * 2));
-
-                    ctx.drawImage(
-                        imageElement,
-                        sourceX, sourceY, sourceWidth, sourceHeight,
-                        0, 0, 120, 120
-                    );
-
-                    const thumbWrapper = document.createElement('div');
-                    thumbWrapper.className = `face-thumb-wrapper ${extractions.length === 1 ? 'selected' : ''}`;
-                    thumbWrapper.dataset.index = i;
-
-                    const thumbImg = document.createElement('img');
-                    thumbImg.className = 'face-thumb';
-                    thumbImg.src = canvas.toDataURL();
-
-                    thumbWrapper.appendChild(thumbImg);
-                    DOM.facesPool.appendChild(thumbWrapper);
-
-                    // Map selection event handling metrics
-                    thumbWrapper.addEventListener('click', () => {
-                        document.querySelectorAll('.face-thumb-wrapper').forEach(w => w.classList.remove('selected'));
-                        thumbWrapper.classList.add('selected');
-                        SystemState.selectedFaceIndex = i;
-                        DOM.btnSearch.removeAttribute('disabled');
-                    });
-                }
-
-                // Auto-select first parameter element signatures if uniqueness bounds detected cleanly
-                if (extractions.length === 1) {
-                    SystemState.selectedFaceIndex = 0;
-                    DOM.btnSearch.removeAttribute('disabled');
-                }
-                
-                DOM.btnReset.removeAttribute('disabled');
-
-            } catch (err) {
-                console.error("Failure running internal tracking face-api extraction logic: ", err);
-                updateEngineStatus("Error processing image file parameters.", false);
+        /**
+         * BACKGROUND SCAN PIPELINE FOR STATIC ASSETS MATRIX
+         */
+        async function triggerBackgroundNeuralScan() {
+            if (!appState.isEngineReady) {
+                // Loop back execution queue hook safely if core is loading
+                setTimeout(triggerBackgroundNeuralScan, 1000);
+                return;
             }
-        }
 
-        // Execute Deep Analytics Neural Search over full Gallery assets stack list matrix
-        async function executeParallelGalleryFacialScan() {
-            if (SystemState.selectedFaceIndex === null || SystemState.detectedFaceDescriptors.length === 0) return;
-
-            const referenceDescriptor = SystemState.detectedFaceDescriptors[SystemState.selectedFaceIndex].descriptor;
-            const faceMatcher = new faceapi.FaceMatcher(referenceDescriptor, SystemState.matchThreshold);
-
-            DOM.progressPanel.style.display = 'block';
-            DOM.btnSearch.setAttribute('disabled', 'true');
-            DOM.fileInput.setAttribute('disabled', 'true');
+            const cards = document.querySelectorAll('.gallery-card');
             
-            let matchedCount = 0;
-            const cards = document.querySelectorAll('.photo-card');
-            
-            // Iterate over all mapped DOM card objects elements architectures running asynchronous logic transformations sequential
             for (let i = 0; i < cards.length; i++) {
                 const card = cards[i];
-                const imagePath = card.dataset.path;
+                const imgUrl = card.dataset.src;
                 
-                const percentProgress = Math.round(((i) / cards.length) * 100);
-                updateEngineStatus(`Scanning gallery... [${i + 1}/${cards.length}]`, false);
-                updateProgressBarUI(`Analyzing image asset: ${imagePath.split('/').pop()}`, percentProgress);
-
+                card.classList.add('searching');
+                
                 try {
-                    let singleGalleryDescriptorContainer = SystemState.galleryDescriptorsMap.get(imagePath);
+                    // Instantiation image parsing container dynamically detached from layout DOM processing viewport frames
+                    const htmlImg = new Image();
+                    htmlImg.src = imgUrl;
+                    await new Promise((resolve) => htmlImg.onload = resolve);
 
-                    // Lazy extract descriptors optimization layer cache processing
-                    if (!singleGalleryDescriptorContainer) {
-                        // Dynamically request image element component memory pointers context
-                        const targetImgDomElement = card.querySelector('img');
-                        
-                        // Fallback verification mapping checks ensuring object availability context profiles valid state 
-                        if(targetImgDomElement && targetImgDomElement.complete && targetImgDomElement.naturalWidth !== 0) {
-                            singleGalleryDescriptorContainer = await faceapi.detectAllFaces(targetImgDomElement)
-                                                                            .withFaceLandmarks()
-                                                                            .withFaceDescriptors();
-                            // Cache values data parameters dynamically inside memory layer map tracking
-                            SystemState.galleryDescriptorsMap.set(imagePath, singleGalleryDescriptorContainer);
-                        }
-                    }
+                    const analyticalDetections = await faceapi.detectAllFaces(htmlImg)
+                        .withFaceLandmarks()
+                        .withFaceDescriptors();
 
-                    // Compute Euclidean matrix matches parameters context vectors profiles
-                    let isMatchFound = false;
-                    let bestMatchScore = null;
+                    appState.computedDescriptors[imgUrl] = analyticalDetections;
 
-                    if (singleGalleryDescriptorContainer && singleGalleryDescriptorContainer.length > 0) {
-                        for (const individualFace of singleGalleryDescriptorContainer) {
-                            const matchResult = faceMatcher.findBestMatch(individualFace.descriptor);
-                            // Lower distance values imply increased facial composition accuracy parameters metrics match vectors
-                            if (matchResult.label !== 'unknown') {
-                                isMatchFound = true;
-                                const accuracyMetric = Math.round((1 - matchResult.distance) * 100);
-                                if(bestMatchScore === null || accuracyMetric > bestMatchScore) {
-                                    bestMatchScore = accuracyMetric;
-                                }
-                            }
-                        }
-                    }
-
-                    // Modify visual layers DOM structural layout configurations states mapping properties definitions
-                    if (isMatchFound) {
-                        matchedCount++;
-                        card.classList.remove('not-matched');
-                        card.classList.add('matched');
-                        
-                        const scoreBadge = card.querySelector('.match-score');
-                        if (scoreBadge) {
-                            scoreBadge.textContent = `${bestMatchScore}% Match`;
-                            scoreBadge.style.display = 'inline-block';
-                        }
-                    } else {
-                        card.classList.remove('matched');
-                        card.classList.add('not-matched');
-                        const scoreBadge = card.querySelector('.match-score');
-                        if (scoreBadge) scoreBadge.style.display = 'none';
-                    }
-
-                } catch (cardProcessingError) {
-                    console.error(`Asset index compilation error bypassed processing for location path target profile: ${imagePath}`, cardProcessingError);
+                    // Optionally overlay box matrix bounding canvas metrics
+                    drawFaceBoxesOnCard(card, htmlImg, analyticalDetections);
+                } catch (e) {
+                    console.error(`Neural parsing context fault across index file path array targeting path [${imgUrl}]: `, e);
                 }
+                
+                card.classList.remove('searching');
+            }
+        }
+
+        function drawFaceBoxesOnCard(card, htmlImg, detections) {
+            const canvas = card.querySelector('.analysis-canvas');
+            if (!canvas || detections.length === 0) return;
+
+            const displaySize = { width: card.clientWidth, height: card.clientHeight };
+            canvas.width = displaySize.width;
+            canvas.height = displaySize.height;
+
+            // Compute dimensions scaling configurations
+            const dims = faceapi.matchDimensions(canvas, displaySize);
+            const resizedDetections = faceapi.resizeResults(detections, {
+                width: htmlImg.naturalWidth,
+                height: htmlImg.naturalHeight
+            });
+
+            // Draw bounding context structures seamlessly inside cards
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
+            ctx.lineWidth = 2;
+
+            resizedDetections.forEach(det => {
+                const box = det.detection.box;
+                // Translate image dimensions scaling mappings to dynamic viewport client sizes
+                const x = (box.x / htmlImg.naturalWidth) * displaySize.width;
+                const y = (box.y / htmlImg.naturalHeight) * displaySize.height;
+                const w = (box.width / htmlImg.naturalWidth) * displaySize.width;
+                const h = (box.height / htmlImg.naturalHeight) * displaySize.height;
+                ctx.strokeRect(x, y, w, h);
+            });
+        }
+
+        /**
+         * UPLOAD PROCESSING CORE ALGORITHMIC LOGIC PIPELINE
+         */
+        dom.dropZone.addEventListener('click', () => dom.fileInput.click());
+        dom.dropZone.addEventListener('dragover', (e) => { e.preventDefault(); });
+        dom.dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (e.dataTransfer.files.length > 0) {
+                processUploadedQueryFile(e.dataTransfer.files[0]);
+            }
+        });
+        dom.fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                processUploadedQueryFile(e.target.files[0]);
+            }
+        });
+
+        async function processUploadedQueryFile(file) {
+            if (!appState.isEngineReady) {
+                alert("Please wait until the biometric models are initialized fully into RAM arrays.");
+                return;
             }
 
-            // Completion processing architecture engine logs mappings state updates metrics configurations
-            updateProgressBarUI("Recognition sequence complete", 100);
-            updateEngineStatus("Search matching execution verified.", true);
-            DOM.globalStats.textContent = "Scan Sequence Completed";
+            dom.faceSelectorWrapper.style.display = 'none';
+            dom.facesThumbGrid.innerHTML = '';
             
-            // Display match analytics interface components parameters
-            DOM.matchCountVal.textContent = matchedCount;
-            DOM.matchCounterDisplay.style.display = 'block';
-            DOM.fileInput.removeAttribute('disabled');
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = async () => {
+                    dom.statusText.textContent = "Analyzing uploaded query file...";
+                    
+                    const detections = await faceapi.detectAllFaces(img)
+                        .withFaceLandmarks()
+                        .withFaceDescriptors();
 
-            setTimeout(() => {
-                DOM.progressPanel.style.display = 'none';
-            }, 1500);
+                    if (detections.length === 0) {
+                        dom.statusText.textContent = "No faces found in uploaded photo.";
+                        return;
+                    }
+
+                    dom.statusText.textContent = `Extracted ${detections.length} source face vector structures.`;
+                    dom.faceSelectorWrapper.style.display = 'flex';
+                    dom.btnResetSearch.style.display = 'flex';
+
+                    // Extract Crops for profile selection system
+                    for (let i = 0; i < detections.length; i++) {
+                        const det = detections[i];
+                        const box = det.detection.box;
+                        
+                        const canvasThumb = document.createElement('canvas');
+                        canvasThumb.width = 80;
+                        canvasThumb.height = 80;
+                        const ctxThumb = canvasThumb.getContext('2d');
+
+                        // Execute local mathematical crop translation bounds matrix securely
+                        ctxThumb.drawImage(
+                            img,
+                            box.x, box.y, box.width, box.height,
+                            0, 0, 80, 80
+                        );
+
+                        const thumbImg = document.createElement('img');
+                        thumbImg.className = 'face-thumb';
+                        thumbImg.src = canvasThumb.toDataURL();
+                        thumbImg.dataset.index = i;
+                        
+                        // Event Execution Binding
+                        thumbImg.addEventListener('click', () => {
+                            document.querySelectorAll('.face-thumb').forEach(el => el.classList.remove('selected'));
+                            thumbImg.classList.add('selected');
+                            appState.selectedTargetDescriptor = det.descriptor;
+                            executeFaceBiometricMatchingMatrix();
+                        });
+
+                        dom.facesThumbGrid.appendChild(thumbImg);
+                    }
+
+                    // Auto select index 0 initially default
+                    dom.facesThumbGrid.children[0].click();
+                };
+            };
+            reader.readAsDataURL(file);
         }
 
-        function updateProgressBarUI(stepLabel, percentValue) {
-            DOM.progressLabel.textContent = stepLabel;
-            DOM.progressPercent.textContent = `${percentValue}%`;
-            DOM.progressBar.style.width = `${percentValue}%`;
-        }
+        /**
+         * MATCH ENGINE CORE EUCLIDEAN DISTANCE COMPUTATION
+         */
+        function executeFaceBiometricMatchingMatrix() {
+            if (!appState.selectedTargetDescriptor) return;
 
-        function clearDetectedFacesPreviewPool() {
-            DOM.facesPool.innerHTML = '';
-            DOM.pickerArea.style.display = 'none';
-            SystemState.selectedFaceIndex = null;
-            SystemState.detectedFaceDescriptors = [];
-            SystemState.uploadedImageElement = null;
-        }
+            dom.progressContainer.style.display = 'flex';
+            let matchedElementsCounter = 0;
 
-        function resetGalleryCardsVisualStates() {
-            const cards = document.querySelectorAll('.photo-card');
-            cards.forEach(card => {
-                card.className = 'photo-card glass-panel';
-                const scoreBadge = card.querySelector('.match-score');
-                if (scoreBadge) scoreBadge.style.display = 'none';
+            const cards = document.querySelectorAll('.gallery-card');
+            const totalItems = cards.length;
+
+            cards.forEach((card, index) => {
+                const url = card.dataset.src;
+                const matchesFoundInPhoto = appState.computedDescriptors[url] || [];
+                
+                let highMatchConfidence = 0;
+                let isMatchVerified = false;
+
+                // Loop descriptor array vectors for match verification
+                for (let det of matchesFoundInPhoto) {
+                    // Euclidean distance vector check: formula length of absolute distance vector spectrum 
+                    const distance = faceapi.euclideanDistance(appState.selectedTargetDescriptor, det.descriptor);
+                    if (distance <= CONFIG.DISTANCE_THRESHOLD) {
+                        isMatchVerified = true;
+                        // Transform mathematical distance value configuration into direct intuitive percentile match confidence
+                        const currentConfidence = Math.round((1 - distance) * 100);
+                        if (currentConfidence > highMatchConfidence) {
+                            highMatchConfidence = currentConfidence;
+                        }
+                    }
+                }
+
+                // Update individual item architecture visual presentation states natively
+                const badge = card.querySelector('.match-badge');
+                const confidenceSpan = card.querySelector('.match-confidence');
+
+                card.classList.remove('match-active', 'match-failed');
+                
+                if (isMatchVerified) {
+                    card.classList.add('match-active');
+                    confidenceSpan.textContent = `${highMatchConfidence}%`;
+                    matchedElementsCounter++;
+                } else {
+                    card.classList.add('match-failed');
+                }
+
+                // Smooth background UI thread calculation ticks updating global orchestration progress meters
+                const currentPct = Math.round(((index + 1) / totalItems) * 100);
+                dom.progressPct.textContent = `${currentPct}%`;
+                dom.progressBarFill.style.width = `${currentPct}%`;
             });
-            DOM.matchCounterDisplay.style.display = 'none';
+
+            dom.statMatches.textContent = matchedElementsCounter;
+            
+            setTimeout(() => {
+                dom.progressContainer.style.display = 'none';
+            }, 800);
         }
 
-        function hardResetSearchEngineWorkspaceUX() {
-            clearDetectedFacesPreviewPool();
-            resetGalleryCardsVisualStates();
-            DOM.fileInput.value = '';
-            DOM.btnSearch.setAttribute('disabled', 'true');
-            DOM.btnReset.setAttribute('disabled', 'true');
-            DOM.progressPanel.style.display = 'none';
-            updateEngineStatus("AI Engine Active & Primed", true);
-            DOM.globalStats.textContent = "Engine Ready";
+        // Reset operational visual layouts back to structural defaults
+        dom.btnResetSearch.addEventListener('click', () => {
+            appState.selectedTargetDescriptor = null;
+            dom.faceSelectorWrapper.style.display = 'none';
+            dom.btnResetSearch.style.display = 'none';
+            dom.statMatches.textContent = '-';
+            dom.statusText.textContent = "AI Face Engine Active & Live";
+            
+            document.querySelectorAll('.gallery-card').forEach(card => {
+                card.classList.remove('match-active', 'match-failed');
+            });
+        });
+
+        /**
+         * FULLSCREEN LIGHTBOX MODE AND ADVANCED INTERFACES
+         */
+        let currentZoomScale = 1;
+        let isPanningActive = false;
+        let panStartX = 0, panStartY = 0, currentPanX = 0, currentPanY = 0;
+
+        function launchLightbox(index) {
+            if (index < 0 || index >= appState.galleryManifest.length) return;
+            appState.activeLightboxIndex = index;
+            
+            const targetUrl = appState.galleryManifest[index];
+            
+            // Fade visual transition smoothness hooks active
+            dom.lightboxImg.style.opacity = '0';
+            dom.lightbox.classList.add('active');
+
+            const bufferImg = new Image();
+            bufferImg.src = targetUrl;
+            bufferImg.onload = () => {
+                dom.lightboxImg.src = targetUrl;
+                dom.lightboxImg.style.opacity = '1';
+                resetZoomParameters();
+            };
         }
+
+        function closeLightbox() {
+            dom.lightbox.classList.remove('active');
+            appState.activeLightboxIndex = -1;
+        }
+
+        function navigateLightbox(offset) {
+            let nextIndex = appState.activeLightboxIndex + offset;
+            if (nextIndex >= appState.galleryManifest.length) nextIndex = 0;
+            if (nextIndex < 0) nextIndex = appState.galleryManifest.length - 1;
+            launchLightbox(nextIndex);
+        }
+
+        function downloadActiveOriginalAsset() {
+            if (appState.activeLightboxIndex === -1) return;
+            const url = appState.galleryManifest[appState.activeLightboxIndex];
+            const linkAnchor = document.createElement('a');
+            linkAnchor.href = url;
+            linkAnchor.download = url.substring(url.lastIndexOf('/') + 1);
+            document.body.appendChild(linkAnchor);
+            linkAnchor.click();
+            document.body.removeChild(linkAnchor);
+        }
+
+        // Event Handling Hooks setup
+        dom.lbClose.addEventListener('click', closeLightbox);
+        dom.lbPrev.addEventListener('click', () => navigateLightbox(-1));
+        dom.lbNext.addEventListener('click', () => navigateLightbox(1));
+        dom.lbDownload.addEventListener('click', downloadActiveOriginalAsset);
+
+        // Closing lightbox if clicking directly outside frame container areas
+        dom.lightbox.addEventListener('click', (e) => {
+            if (e.target === dom.lightbox || e.target === dom.lbImgContainer) {
+                closeLightbox();
+            }
+        });
+
+        // Native System Keyboard Map Event Routing Hooks
+        window.addEventListener('keydown', (e) => {
+            if (appState.activeLightboxIndex !== -1) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowRight') navigateLightbox(1);
+                if (e.key === 'ArrowLeft') navigateLightbox(-1);
+            }
+        });
+
+        /**
+         * EXPERT INTERACTION LEVEL WHEEL/PINCH ZOOM ARCHITECTURE HOOKS
+         */
+        dom.lbImgContainer.addEventListener('wheel', (e) => {
+            if (appState.activeLightboxIndex === -1) return;
+            e.preventDefault();
+            
+            const zoomSpeedFactor = 0.1;
+            if (e.deltaY < 0) {
+                currentZoomScale = Math.min(currentZoomScale + zoomSpeedFactor, 5);
+            } else {
+                currentZoomScale = Math.max(currentZoomScale - zoomSpeedFactor, 1);
+            }
+            
+            if (currentZoomScale === 1) {
+                currentPanX = 0;
+                currentPanY = 0;
+            }
+            applyTransformationMatrix();
+        }, { passive: false });
+
+        function resetZoomParameters() {
+            currentZoomScale = 1;
+            currentPanX = 0;
+            currentPanY = 0;
+            applyTransformationMatrix();
+        }
+
+        function applyTransformationMatrix() {
+            dom.lightboxImg.style.transform = `translate(${currentPanX}px, ${currentPanY}px) scale(${currentZoomScale})`;
+        }
+
+        // Panning operations execution routines via generic pointer events
+        dom.lightboxImg.addEventListener('mousedown', (e) => {
+            if (currentZoomScale > 1) {
+                isPanningActive = true;
+                panStartX = e.clientX - currentPanX;
+                panStartY = e.clientY - currentPanY;
+                e.preventDefault();
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isPanningActive && currentZoomScale > 1) {
+                currentPanX = e.clientX - panStartX;
+                currentPanY = e.clientY - panStartY;
+                applyTransformationMatrix();
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isPanningActive = false;
+        });
+
+        // Mobile Smart Device Touch Swipe Navigation Configuration Architecture
+        let touchSwipeStartX = 0;
+        dom.lightbox.addEventListener('touchstart', (e) => {
+            touchSwipeStartX = e.changedTouches[0].clientX;
+        }, { passive: true });
+
+        dom.lightbox.addEventListener('touchend', (e) => {
+            if (currentZoomScale > 1) return; // ignore swipe gestures when zoomed in
+            let touchSwipeEndX = e.changedTouches[0].clientX;
+            let swipeDeltaX = touchSwipeEndX - touchSwipeStartX;
+            
+            if (Math.abs(swipeDeltaX) > 60) {
+                if (swipeDeltaX > 0) {
+                    navigateLightbox(-1); // Swiped to right -> load previous item asset
+                } else {
+                    navigateLightbox(1);  // Swiped to left -> load next item asset
+                }
+            }
+        }, { passive: true });
+
+
+        /**
+         * ENTRY POINT METHOD ARCHITECTURE LIFECYCLE LOAD CALLS
+         */
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Concurrent task launching profiles optimization sequence
+            await loadNeuralModels();
+            await discoverGalleryAssets();
+        });
     </script>
 </body>
 </html>
