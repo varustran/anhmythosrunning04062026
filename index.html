@@ -737,15 +737,16 @@
         }
 
         // TẢI CHUẨN HOÁ AI MODEL QUA CDN KHÔNG BỊ CHẶN CORS TRÊN VERCEL
+        // TẢI MODEL NỘI BỘ TỪ SERVER VERCEL - KHÔNG LO BỊ CHẶN MẠNG QUỐC TẾ
         async function loadNeuralModels() {
             try {
-                // Sử dụng CDN chuyên dụng của jsdelivr trỏ trực tiếp vào bộ models gốc
-                const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
+                // Đường dẫn trỏ thẳng vào thư mục /models nằm trong project của bạn
+                const MODEL_URL = './models';
                 
                 await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
                 await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
                 await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-
+        
                 appState.isEngineReady = true;
                 dom.statusDot.classList.add('ready');
                 dom.statusText.textContent = "AI Face Engine Active & Live";
